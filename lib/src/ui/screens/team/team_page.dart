@@ -1,56 +1,53 @@
 import 'package:devfest_flutter_app/src/bloc/speakers/speaker_bloc.dart';
 import 'package:devfest_flutter_app/src/bloc/speakers/speakers_bloc_event.dart';
 import 'package:devfest_flutter_app/src/bloc/speakers/speakers_bloc_state.dart';
+import 'package:devfest_flutter_app/src/bloc/team/team_bloc.dart';
 import 'package:devfest_flutter_app/src/resources/abstracts/abstract_repositories.dart';
+import 'package:devfest_flutter_app/src/ui/widgets/info/members_widget.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/speakers/speakers_grid.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/speakers/speakers_widget.dart';
 import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SpeakersPage extends StatefulWidget {
-  final SpeakerRepository repository;
-  SpeakersPage({Key key, @required this.repository})
+class TeamPage extends StatefulWidget {
+  final TeamRepository repository;
+  TeamPage({Key key, @required this.repository})
       : assert(repository != null),
         super(key: key);
 
   @override
-  _SpeakersPageState createState() => _SpeakersPageState();
+  _TeamPageState createState() => _TeamPageState();
 }
 
-class _SpeakersPageState extends State<SpeakersPage> {
-  SpeakerBloc _speakerBloc;
-  SpeakerRepository _speakerRepository;
+class _TeamPageState extends State<TeamPage> {
+  TeamBloc _teamBloc;
+  TeamRepository _teamRepository;
 
   @override
   void initState() {
-    _speakerRepository = widget.repository;
-    _speakerBloc = SpeakerBloc(speakerRepository: _speakerRepository);
-    _speakerBloc.dispatch(SpeakersGridInitiation());
+    _teamRepository = widget.repository;
+    _teamBloc = TeamBloc(_teamRepository);
     super.initState();
   }
 
   @override
   void dispose() {
-    _speakerBloc.dispose();
+    _teamBloc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SpeakerBloc>(
-      bloc: _speakerBloc,
-      child: BlocBuilder<SpeakersEvent, SpeakersState>(
-        bloc: _speakerBloc,
-        builder: (BuildContext context, SpeakersState state) {
-          if (state is SpeakersInit || state is SpeakersLoading) {
+    return StreamBuilder<bool>(
+        stream: _teamBloc.teamLoaded,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
             return LoadingWidget();
+          } else {
+            return TeamMembersWidget(_teamBloc.teams);
           }
-          if (state is SpeakersDone) {
-            return SpeakersGridViewer(speakerBloc: _speakerBloc,);
-          }
-        },
-      ),
+        }
     );
   }
 }

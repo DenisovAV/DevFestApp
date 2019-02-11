@@ -19,6 +19,7 @@ dependencies:
   cloud_functions: ^0.0.5
   equatable: ^0.1.6
   flutter_bloc: ^0.5.1
+  google_maps_flutter: ^0.2.0
 
 dev_dependencies:
   test: ^1.5.1
@@ -38,6 +39,8 @@ flutter:
   uses-material-design: true
 
   assets:
+   - assets/images/fon1.png
+   - assets/images/speaker.jpg
    - assets/images/home.jpg
    - assets/images/team.jpg
    - assets/images/logo.svg

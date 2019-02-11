@@ -7,8 +7,8 @@ import 'package:devfest_flutter_app/src/ui/screens/schedule/schedule_page.dart';
 import 'package:devfest_flutter_app/src/models/user.dart';
 import 'package:devfest_flutter_app/src/resources/speaker_repository.dart';
 import 'package:devfest_flutter_app/src/ui/screens/speakers/speakers_page.dart';
+import 'package:devfest_flutter_app/src/ui/widgets/info/info_widget.dart';
 import 'package:devfest_flutter_app/src/utils/icons.dart';
-import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -112,21 +112,21 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       ),
       NavigationIconView(
         icon: Icon(Icons.schedule),
-        widget: SchedulePage(scheduleRepository: FirestoreScheduleRepository(Firestore.instance),),
+        widget: SchedulePage(repository: FirestoreScheduleRepository(Firestore.instance),),
         title: 'Schedule',
         color: Colors.blue,
         vsync: this,
       ),
       NavigationIconView(
         icon: Icon(Icons.group),
-        widget: SpeakersPage(speakerRepository: FirestoreSpeakerRepository(Firestore.instance)),
+        widget: SpeakersPage(repository: FirestoreSpeakerRepository(Firestore.instance)),
         title: 'Speakers',
         color: Colors.blue,
         vsync: this,
       ),
       NavigationIconView(
         icon: Icon(Icons.info),
-        widget: LoadingWidget(),
+        widget: InfoTabWidget(),
         title: 'Partners',
         color: Colors.blue,
         vsync: this,

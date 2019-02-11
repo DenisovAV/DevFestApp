@@ -60,7 +60,7 @@ class SpeakerDetailsViewer extends StatelessWidget {
           _SocialViewer(
             speaker.socials
                 ?.map((social) =>
-                    IconHelper().getSocialIcon(social.icon, social.link))
+                    IconHelper().getSocialIcon(social.icon, social.link, 32.0))
                 ?.toList(),
             SOCIAL_NETWORKS,
           )

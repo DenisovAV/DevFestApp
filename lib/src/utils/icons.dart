@@ -8,34 +8,41 @@ class IconHelper {
   double badgeWidth = 24.0;
   double badgeHeight = 24.0;
 
-  double socialWidth = 32.0;
-  double socialHeight = 32.0;
-
-
-  Widget getBadgeIcon(String name, String url) => Padding(padding: EdgeInsets.only(right: 4.0),child: FloatingActionButton(
-      backgroundColor: getCommunityColor(name),
-      child: SizedBox(
-          width: badgeWidth,
-          height: badgeHeight,
-          child: SvgPicture.asset('assets/icons/${name}.svg', color: Colors.white)),
+  Widget getBadgeIcon(String name, String url) => Padding(
+      padding: EdgeInsets.only(right: 4.0),
+      child: FloatingActionButton(
+          backgroundColor: getCommunityColor(name),
+          child: SizedBox(
+              width: badgeWidth,
+              height: badgeHeight,
+              child: SvgPicture.asset('assets/icons/${name}.svg',
+                  color: Colors.white)),
           heroTag: url,
-          shape: CircleBorder(side: BorderSide(color: Colors.white, width: 3.0)),
+          shape:
+              CircleBorder(side: BorderSide(color: Colors.white, width: 3.0)),
           mini: true,
-          onPressed: () {_launchURL(url);}))
-      ;
+          onPressed: () {
+            _launchURL(url);
+          }));
 
-  Widget getSocialIcon(String name, String url) => IconButton(
-      icon: SizedBox(
-          width: socialWidth,
-          height: socialHeight,
-          child: SvgPicture.asset('assets/icons/${name}.svg')),
-      onPressed: () {_launchURL(url);})
-  ;
+  Widget getSocialIcon(String name, String url, double size, {Color color}) =>
+      SizedBox(
+        child: IconButton(
+            iconSize: size,
+            padding: EdgeInsets.zero,
+            icon: SvgPicture.asset('assets/icons/${name}.svg', color: color),
+            onPressed: () {
+              _launchURL(url);
+            }),
+        width: size,
+        height: size,
+      );
 
   Widget getTitleLogo(double width, double height) => SizedBox(
-          width: width,
-          height: height,
-          child: SvgPicture.asset('assets/images/logo-monochrome.svg', color: Colors.white));
+      width: width,
+      height: height,
+      child: SvgPicture.asset('assets/images/logo-monochrome.svg',
+          color: Colors.white));
 
   Future _launchURL(String url) async {
     if (await canLaunch(url)) {
@@ -45,10 +52,10 @@ class IconHelper {
     }
   }
 
-  static String getSessionImageAsset(String tag){
-    if(tag=='Machine Learning') return 'assets/tags/machine_learning.jpg';
-    if(tag=='Kotlin') return 'assets/tags/kotlin.png';
-    if(tag=='Android') return 'assets/tags/android.jpg';
+  static String getSessionImageAsset(String tag) {
+    if (tag == 'Machine Learning') return 'assets/tags/machine_learning.jpg';
+    if (tag == 'Kotlin') return 'assets/tags/kotlin.png';
+    if (tag == 'Android') return 'assets/tags/android.jpg';
     return 'assets/images/logo.png';
   }
 
@@ -97,4 +104,3 @@ class CoverImageWidget extends StatelessWidget {
     }
   }
 }
-

@@ -7,3 +7,23 @@ class LoadingWidget extends StatelessWidget {
   }
 
 }
+
+class CircleImage extends StatelessWidget {
+
+  ImageProvider image;
+
+  CircleImage(this.image);
+
+  Widget build(BuildContext context) {
+    return Container(
+        width: 92.0,
+        height: 92.0,
+        decoration: new BoxDecoration(
+            shape: BoxShape.circle,
+            image: new DecorationImage(
+                fit: BoxFit.fill,
+                image: image
+            )
+        ));
+  }
+}

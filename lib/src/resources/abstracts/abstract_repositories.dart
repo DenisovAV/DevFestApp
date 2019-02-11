@@ -2,6 +2,7 @@
 import 'package:devfest_flutter_app/src/models/schedule.dart';
 import 'package:devfest_flutter_app/src/models/session.dart';
 import 'package:devfest_flutter_app/src/models/speaker.dart';
+import 'package:devfest_flutter_app/src/models/team.dart';
 import 'package:devfest_flutter_app/src/models/ticket.dart';
 import 'package:devfest_flutter_app/src/models/user.dart';
 
@@ -30,4 +31,9 @@ abstract class ScheduleRepository {
 
 abstract class TicketRepository {
   Stream<List<Ticket>> getTickets();
+}
+
+abstract class TeamRepository {
+  Stream<List<Team>> getTeams();
+  Stream<List<Member>> getMembers(String team);
 }

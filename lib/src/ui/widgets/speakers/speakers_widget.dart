@@ -37,8 +37,6 @@ class _SpeakerViewerState extends State<SpeakerViewer>
     super.dispose();
   }
 
-  // The maximum offset value is 0,0. If the size of this renderer's box is w,h
-  // then the minimum offset value is w - _scale * w, h - _scale * h.
   Offset _clampOffset(Offset offset) {
     final Size size = context.size;
     final Offset minOffset =
