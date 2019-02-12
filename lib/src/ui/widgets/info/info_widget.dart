@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:devfest_flutter_app/src/resources/team_repository.dart';
+import 'package:devfest_flutter_app/src/resources/repository.dart';
 import 'package:devfest_flutter_app/src/ui/screens/team/team_page.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/info/venue_widget.dart';
-import 'package:devfest_flutter_app/src/ui/widgets/info/members_widget.dart';
 import 'package:devfest_flutter_app/src/utils/colors.dart';
 import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +21,7 @@ class InfoTabWidget extends StatelessWidget {
               Tab(child: TabTextTheme("About")),
             ],
           ),
-          Expanded(child: TabBarView(children: <Widget>[TeamPage(repository: FirestoreTeamRepository(Firestore.instance)), LoadingWidget(), MapsDemo()])),
+          Expanded(child: TabBarView(children: <Widget>[TeamPage(repository: FirestoreRepository(Firestore.instance)), LoadingWidget(), MapsDemo()])),
         ],
       ),
     );

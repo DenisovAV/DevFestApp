@@ -1,13 +1,14 @@
 import 'dart:async';
 
+import 'package:devfest_flutter_app/src/bloc/events/event.dart';
 import 'package:devfest_flutter_app/src/models/team.dart';
 import 'package:devfest_flutter_app/src/resources/abstracts/abstract_repositories.dart';
 
 class TeamBloc {
   final TeamRepository teamRepository;
   List<Team> teams = List<Team>();
-  final teamController = StreamController<bool>();
-  Stream<bool> get teamLoaded => teamController.stream;
+  final teamController = StreamController<BlocEvent>();
+  Stream<BlocEvent> get teamLoaded => teamController.stream;
 
   TeamBloc(this.teamRepository) : assert(teamRepository != null) {
     init();
@@ -22,7 +23,7 @@ class TeamBloc {
     this.teams
         .forEach((team) => teamRepository.getMembers(team.id).listen((members) {
               team.members = members;
-              teamController.sink.add(true);
+              teamController.sink.add(TeamLoadedEvent());
             }));
   }
 

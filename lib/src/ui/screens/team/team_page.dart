@@ -1,17 +1,13 @@
-import 'package:devfest_flutter_app/src/bloc/speakers/speaker_bloc.dart';
-import 'package:devfest_flutter_app/src/bloc/speakers/speakers_bloc_event.dart';
-import 'package:devfest_flutter_app/src/bloc/speakers/speakers_bloc_state.dart';
+import 'package:devfest_flutter_app/src/bloc/events/event.dart';
+import 'package:devfest_flutter_app/src/bloc/main/main_bloc.dart';
 import 'package:devfest_flutter_app/src/bloc/team/team_bloc.dart';
 import 'package:devfest_flutter_app/src/resources/abstracts/abstract_repositories.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/info/members_widget.dart';
-import 'package:devfest_flutter_app/src/ui/widgets/speakers/speakers_grid.dart';
-import 'package:devfest_flutter_app/src/ui/widgets/speakers/speakers_widget.dart';
 import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TeamPage extends StatefulWidget {
-  final TeamRepository repository;
+  final Repository repository;
   TeamPage({Key key, @required this.repository})
       : assert(repository != null),
         super(key: key);
@@ -21,13 +17,13 @@ class TeamPage extends StatefulWidget {
 }
 
 class _TeamPageState extends State<TeamPage> {
-  TeamBloc _teamBloc;
-  TeamRepository _teamRepository;
+  MainBloc _teamBloc;
+  Repository _teamRepository;
 
   @override
   void initState() {
     _teamRepository = widget.repository;
-    _teamBloc = TeamBloc(_teamRepository);
+    _teamBloc = MainBloc(_teamRepository);
     super.initState();
   }
 
@@ -39,8 +35,8 @@ class _TeamPageState extends State<TeamPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<bool>(
-        stream: _teamBloc.teamLoaded,
+    return StreamBuilder<BlocEvent>(
+        stream: _teamBloc.teamsStream,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return LoadingWidget();
