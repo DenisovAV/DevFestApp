@@ -22,32 +22,32 @@ main() {
 
       when(firestore.collection(FirestoreSpeakerRepository.SPEAKERS_COLLECTION))
           .thenReturn(collection);
-      when(collection.document(TEST_SPEAKER.id)).thenReturn(document);
+      when(collection.document(testSpeaker.id)).thenReturn(document);
 
-      repository.updateSpeaker(TEST_SPEAKER);
+      repository.updateSpeaker(testSpeaker);
 
-      verify(document.updateData(TEST_SPEAKER.toJson()));
+      verify(document.updateData(testSpeaker.toJson()));
     });
 
     test('should listen for updates to the collection', () {
       final snapshot = MockQuerySnapshot();
       final snapshots = Stream.fromIterable([snapshot]);
-      final document = MockDocumentSnapshot(TEST_SPEAKER.toJson());
+      final document = MockDocumentSnapshot(testSpeaker.toJson());
       final repository = FirestoreSpeakerRepository(firestore);
 
       when(firestore.collection(FirestoreSpeakerRepository.SPEAKERS_COLLECTION))
           .thenReturn(collection);
       when(collection.snapshots()).thenAnswer((_) => snapshots);
       when(snapshot.documents).thenReturn([document]);
-      when(document.documentID).thenReturn(TEST_SPEAKER.id);
+      when(document.documentID).thenReturn(testSpeaker.id);
 
-      expect(repository.getSpeakers(), emits([TEST_SPEAKER]));
+      expect(repository.getSpeakers(), emits([testSpeaker]));
     });
 
     test('should get speakers by id', () {
       final snapshot = MockQuerySnapshot();
       final snapshots = Stream.fromIterable([snapshot]);
-      final document = MockDocumentSnapshot(TEST_SPEAKER.toJson());
+      final document = MockDocumentSnapshot(testSpeaker.toJson());
       final documentRef = MockDocumentReference();
       final documentSnapshots = Stream.fromIterable([document]);
       final repository = FirestoreSpeakerRepository(firestore);
@@ -56,12 +56,12 @@ main() {
           .thenReturn(collection);
       when(collection.snapshots()).thenAnswer((_) => snapshots);
       when(documentRef.snapshots()).thenAnswer((_) => documentSnapshots);
-      when(collection.document(TEST_SPEAKER.id)).thenAnswer((_) => documentRef);
+      when(collection.document(testSpeaker.id)).thenAnswer((_) => documentRef);
       when(snapshot.documents).thenReturn([document]);
-      when(document.documentID).thenReturn(TEST_SPEAKER.id);
+      when(document.documentID).thenReturn(testSpeaker.id);
 
-      expect(repository.getSpeakerById(TEST_SPEAKER.id), emits(TEST_SPEAKER));
-      expect(repository.getSpeakersByIds([TEST_SPEAKER.id]), emits([TEST_SPEAKER]));
+      expect(repository.getSpeakerById(testSpeaker.id), emits(testSpeaker));
+      expect(repository.getSpeakersByIds([testSpeaker.id]), emits([testSpeaker]));
     });
   });
 }

@@ -99,16 +99,16 @@ class FirestoreRepository extends Repository {
               .map((doc) => Team.fromMap(doc.data, doc.documentID))
               .toList());
 
-  Stream<List<Member>> getMembers(String team) =>
-      firestore
-          .collection(TEAM_COLLECTION)
-          .document(team)
-          .collection(MEMBERS_COLLECTION)
-          .snapshots()
-          .map((snapshot) =>
-          snapshot.documents
-              .map((doc) => Member.fromMap(doc.data))
-              .toList());
+  Stream<List<Member>> getMembers(String team) {
+    return firestore.collection(TEAM_COLLECTION)
+        .document(team)
+        .collection(MEMBERS_COLLECTION)
+        .snapshots()
+        .map((snapshot) =>
+        snapshot.documents
+            .map((doc) => Member.fromMap(doc.data))
+            .toList());
+  }
 
   Stream<List<Ticket>> getTickets() =>
       firestore

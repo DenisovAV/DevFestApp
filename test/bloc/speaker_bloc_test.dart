@@ -16,7 +16,7 @@ void main() {
 
   setUp(() {
     speakerRepository = MockSpeakerRepository();
-    final List<Speaker> speakers = [TEST_SPEAKER];
+    final List<Speaker> speakers = [testSpeaker];
     when(speakerRepository.getSpeakers()).thenAnswer((_) => Future.value(speakers).asStream());
     speakerBloc = SpeakerBloc(speakerRepository: speakerRepository);
 
@@ -62,7 +62,7 @@ void main() {
         emitsInOrder(expectedResponse),
       );
 
-      speakerBloc.dispatch(SpeakerFooterTapped(speaker: TEST_SPEAKER));
+      speakerBloc.dispatch(SpeakerFooterTapped(speaker: testSpeaker));
     });
   });
 }
