@@ -1,5 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:devfest_flutter_app/src/resources/repository.dart';
+import 'package:devfest_flutter_app/src/bloc/main/main_bloc.dart';
 import 'package:devfest_flutter_app/src/ui/screens/team/team_page.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/info/venue_widget.dart';
 import 'package:devfest_flutter_app/src/utils/colors.dart';
@@ -7,6 +6,11 @@ import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/material.dart';
 
 class InfoTabWidget extends StatelessWidget {
+
+  final MainBloc bloc;
+
+  InfoTabWidget(this.bloc);
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -21,7 +25,7 @@ class InfoTabWidget extends StatelessWidget {
               Tab(child: TabTextTheme("About")),
             ],
           ),
-          Expanded(child: TabBarView(children: <Widget>[TeamPage(repository: FirestoreRepository(Firestore.instance)), LoadingWidget(), MapsDemo()])),
+          Expanded(child: TabBarView(children: <Widget>[TeamPage(bloc), LoadingWidget(), MapsDemo()])),
         ],
       ),
     );
@@ -37,7 +41,7 @@ class TabTextTheme extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(color: ColorUtils.hexToColor("#676767")),
+      style: TextStyle(color: Utils.hexToColor("#676767")),
     );
   }
 }

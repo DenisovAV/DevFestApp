@@ -1,14 +1,14 @@
-import 'package:devfest_flutter_app/src/bloc/speakers/speaker_bloc.dart';
-import 'package:devfest_flutter_app/src/bloc/speakers/speakers_bloc_event.dart';
+import 'package:devfest_flutter_app/src/bloc/events/event.dart';
+import 'package:devfest_flutter_app/src/bloc/main/main_bloc.dart';
 import 'package:devfest_flutter_app/src/models/speaker.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/speakers/speakers_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class SpeakersGridViewer extends StatelessWidget {
-  final SpeakerBloc speakerBloc;
+  final MainBloc speakerBloc;
 
-  SpeakersGridViewer({Key key, @required this.speakerBloc})
+  SpeakersGridViewer(this.speakerBloc, {Key key})
       : assert(speakerBloc != null),
         super(key: key);
 
@@ -33,7 +33,7 @@ class SpeakersGridViewer extends StatelessWidget {
                     .map<SpeakerGridItem>((_speaker) => SpeakerGridItem(
                     _speaker,
                     onBannerTap: (tapped) {
-                      speakerBloc.dispatch(SpeakerFooterTapped(speaker: tapped));
+                      speakerBloc.events.add(SpeakersTappedEvent(tapped));
                     }))
                     .toList(),
               ),
@@ -79,9 +79,7 @@ class SpeakerGridItem extends StatelessWidget {
 
     return GridTile(
       footer: GestureDetector(
-        onTap: () {
-          onBannerTap(speaker);
-        },
+        onTap: () => onBannerTap(speaker),
         child: GridTileBar(
           backgroundColor: Colors.black45,
           title: SpeakerTitleText(speaker.name),

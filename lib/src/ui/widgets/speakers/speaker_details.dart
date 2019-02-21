@@ -81,7 +81,6 @@ class SpeakerDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(speaker.companyLogoUrl);
     return Theme(
       data: ThemeData(
         brightness: Brightness.light,

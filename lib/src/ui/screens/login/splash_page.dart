@@ -46,10 +46,8 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
     animation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         controller.reverse();
-        print('reverse');
       } else if (status == AnimationStatus.dismissed) {
         controller.forward();
-        print('forvard');
       }
     });
 

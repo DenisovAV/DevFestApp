@@ -90,11 +90,7 @@ class _SignInPageState extends State<SignInPage> {
     });
   }
 
-  _onButtonPressed(SignInEvent event) {
-    print('dispatcghed');
-    print(event);
-    _signInBloc.dispatch(event);
-  }
+  _onButtonPressed(SignInEvent event) => _signInBloc.dispatch(event);
 
   @override
   void dispose() {

@@ -25,11 +25,11 @@ class IconHelper {
             _launchURL(url);
           }));
 
-  Widget getSocialIcon(String name, String url, double size, {Color color}) =>
+  Widget getSocialIcon(String name, String url, double size, {Color color, EdgeInsetsGeometry padding}) =>
       SizedBox(
         child: IconButton(
             iconSize: size,
-            padding: EdgeInsets.zero,
+            padding: padding!=null ? padding: EdgeInsets.zero,
             icon: SvgPicture.asset('assets/icons/${name}.svg', color: color),
             onPressed: () {
               _launchURL(url);

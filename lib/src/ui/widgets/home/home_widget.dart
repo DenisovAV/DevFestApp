@@ -1,5 +1,5 @@
-import 'package:devfest_flutter_app/src/bloc/home/home_bloc.dart';
-import 'package:devfest_flutter_app/src/bloc/home/home_bloc_event.dart';
+import 'package:devfest_flutter_app/src/bloc/events/event.dart';
+import 'package:devfest_flutter_app/src/bloc/main/main_bloc.dart';
 import 'package:devfest_flutter_app/src/models/ticket.dart';
 import 'package:flutter/material.dart';
 
@@ -51,13 +51,13 @@ class TicketItem extends StatelessWidget {
 }
 
 class HomePageViewer extends StatefulWidget {
-  final HomePageBloc homePageBloc;
+  final MainBloc bloc;
 
   @override
   _HomePageViewerState createState() => _HomePageViewerState();
 
-  HomePageViewer({Key key, @required this.homePageBloc})
-      : assert(homePageBloc != null),
+  HomePageViewer(this.bloc, {Key key})
+      : assert(bloc != null),
         super(key: key);
 }
 
@@ -81,7 +81,7 @@ class _HomePageViewerState extends State<HomePageViewer>
       if (value != null) {
         _scaffoldKey.currentState
             .showSnackBar(SnackBar(content: Text('You selected: $value')));
-        widget.homePageBloc.dispatch(TicketTapped(ticket: value as Ticket));
+        widget.bloc.events.add(TicketTappedEvent(value as Ticket));
       }
     });
   }
@@ -148,7 +148,7 @@ class _HomePageViewerState extends State<HomePageViewer>
                           child: Text('VIEW HIGHLIGHTS',
                               style: TextStyle(color: Colors.white)),
                           onPressed: () =>
-                              widget.homePageBloc.dispatch(HighlightsTapped()),
+                              widget.bloc.events.add(HighlightsTappedEvent()),
                         ))),
                     Padding(
                         padding: EdgeInsets.only(top: 4.0, bottom: 12.0),
@@ -161,14 +161,14 @@ class _HomePageViewerState extends State<HomePageViewer>
                                 context: context,
                                 child: SimpleDialog(
                                     title: Text('Choose your ticket'),
-                                    children: widget.homePageBloc.tickets
+                                    children: widget.bloc.tickets
                                         .map(
                                           (ticket) => TicketItem(
                                               ticket,
                                               onBannerTap: (ticket) => widget
-                                                  .homePageBloc
-                                                  .dispatch(TicketTapped(
-                                                      ticket: ticket))),
+                                                  .bloc
+                                                  .events
+                                                  .add(TicketTappedEvent(ticket))),
                                         )
                                         .toList()));
                           },

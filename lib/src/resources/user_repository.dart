@@ -20,6 +20,8 @@ class FirebaseUserRepository implements UserRepository {
     throw("authorization type is unknown");
   }
 
+  @override
+  Future<void> logout() => FirebaseAuth.instance.signOut();
 
   Stream<User> getAuthorizedUser() =>
       auth.onAuthStateChanged.map((user) =>

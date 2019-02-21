@@ -1,209 +1,110 @@
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:devfest_flutter_app/src/resources/schedule_repository.dart';
-import 'package:devfest_flutter_app/src/resources/ticket_repository.dart';
+import 'package:devfest_flutter_app/src/bloc/events/event.dart';
+import 'package:devfest_flutter_app/src/bloc/main/main_bloc.dart';
+import 'package:devfest_flutter_app/src/consts/strings.dart';
 import 'package:devfest_flutter_app/src/ui/screens/home/home_page.dart';
 import 'package:devfest_flutter_app/src/ui/screens/schedule/schedule_page.dart';
 import 'package:devfest_flutter_app/src/models/user.dart';
-import 'package:devfest_flutter_app/src/resources/speaker_repository.dart';
 import 'package:devfest_flutter_app/src/ui/screens/speakers/speakers_page.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/info/info_widget.dart';
 import 'package:devfest_flutter_app/src/utils/icons.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/material.dart';
 
-class NavigationIconView {
-  NavigationIconView({
+class NavigationItem {
+  NavigationItem({
     Widget icon,
     Widget widget,
     String title,
-    Color color,
-    TickerProvider vsync,
-  })  : _color = color,
-        _title = title,
-        _widget = widget,
-        item = BottomNavigationBarItem(
+  })  : bodyItem = widget,
+        barItem = BottomNavigationBarItem(
           icon: icon,
           title: Text(title),
-          backgroundColor: color,
-        ),
-        controller = AnimationController(
-          duration: kThemeAnimationDuration,
-          vsync: vsync,
-        ) {
-    _animation = CurvedAnimation(
-      parent: controller,
-      curve: Interval(0.5, 1.0, curve: Curves.fastOutSlowIn),
-    );
-  }
+          backgroundColor: Colors.blue,
+        );
+  final Widget bodyItem;
+  final BottomNavigationBarItem barItem;
 
-  final Widget _widget;
-  final Color _color;
-  final String _title;
-  final BottomNavigationBarItem item;
-  final AnimationController controller;
-  CurvedAnimation _animation;
-
-  FadeTransition transition(
-      BottomNavigationBarType type, BuildContext context) {
-    Color iconColor;
-    if (type == BottomNavigationBarType.shifting) {
-      iconColor = _color;
-    } else {
-      final ThemeData themeData = Theme.of(context);
-      iconColor = themeData.brightness == Brightness.light
-          ? themeData.primaryColor
-          : themeData.accentColor;
-    }
-
-    return FadeTransition(
-      opacity: _animation,
-      child: SlideTransition(
-        position: Tween<Offset>(
-          begin: Offset(0.0, 0.02), // Slightly down.
-          end: Offset.zero,
-        ).animate(_animation),
-        child: Semantics(
-          label: 'Placeholder for $_title tab',
-          child: _widget,
-        ),
-      ),
-    );
-  }
-}
-
-class CustomIcon extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final IconThemeData iconTheme = IconTheme.of(context);
-    return Container(
-      margin: EdgeInsets.all(4.0),
-      width: iconTheme.size - 8.0,
-      height: iconTheme.size - 8.0,
-      color: iconTheme.color,
-    );
-  }
 }
 
 class MainPage extends StatefulWidget {
-  MainPage({this.user});
+  MainPage(this.bloc, {this.user});
 
   final User user;
+  final MainBloc bloc;
 
   @override
   _MainPageState createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
-  int _currentIndex = 0;
-  BottomNavigationBarType _type = BottomNavigationBarType.shifting;
-  List<NavigationIconView> _navigationViews;
+  List<NavigationItem> _navigationViews;
 
   @override
   void initState() {
     super.initState();
-    _navigationViews = <NavigationIconView>[
-      NavigationIconView(
+    _navigationViews = <NavigationItem>[
+      NavigationItem(
         icon: Icon(Icons.home),
-        widget: HomePage(ticketRepository: FirestoreTicketRepository(Firestore.instance)),
-        title: 'Home',
-        color: Colors.blue,
-        vsync: this,
+        widget: HomePage(widget.bloc),
+        title: HOME,
       ),
-      NavigationIconView(
+      NavigationItem(
         icon: Icon(Icons.schedule),
-        widget: SchedulePage(repository: FirestoreScheduleRepository(Firestore.instance),),
-        title: 'Schedule',
-        color: Colors.blue,
-        vsync: this,
+        widget: SchedulePage(widget.bloc),
+        title: SCHEDULE,
       ),
-      NavigationIconView(
+      NavigationItem(
         icon: Icon(Icons.group),
-        widget: SpeakersPage(repository: FirestoreSpeakerRepository(Firestore.instance)),
-        title: 'Speakers',
-        color: Colors.blue,
-        vsync: this,
+        widget: SpeakersPage(widget.bloc),
+        title: SPEAKERS,
       ),
-      NavigationIconView(
+      NavigationItem(
         icon: Icon(Icons.info),
-        widget: InfoTabWidget(),
-        title: 'Partners',
-        color: Colors.blue,
-        vsync: this,
+        widget: InfoTabWidget(widget.bloc),
+        title: INFO,
       )
     ];
-
-    for (NavigationIconView view in _navigationViews)
-      view.controller.addListener(_rebuild);
-
-    _navigationViews[_currentIndex].controller.value = 1.0;
-  }
-
-  @override
-  void dispose() {
-    for (NavigationIconView view in _navigationViews) view.controller.dispose();
-    super.dispose();
-  }
-
-  void _rebuild() {
-    setState(() {
-      // Rebuild in order to animate views.
-    });
-  }
-
-  Widget _buildTransitionsStack() {
-    final List<FadeTransition> transitions = <FadeTransition>[];
-
-    for (NavigationIconView view in _navigationViews)
-      transitions.add(view.transition(_type, context));
-
-    transitions.sort((FadeTransition a, FadeTransition b) {
-      final Animation<double> aAnimation = a.opacity;
-      final Animation<double> bAnimation = b.opacity;
-      final double aValue = aAnimation.value;
-      final double bValue = bAnimation.value;
-      return aValue.compareTo(bValue);
-    });
-
-    return Stack(children: transitions);
   }
 
   @override
   Widget build(BuildContext context) {
-    final BottomNavigationBar botNavBar = BottomNavigationBar(
-      items: _navigationViews
-          .map((navigationView) => navigationView.item).toList(),
-      currentIndex: _currentIndex,
-      type: BottomNavigationBarType.shifting,
-      onTap: (int index) {
-        setState(() {
-          _navigationViews[_currentIndex].controller.reverse();
-          _currentIndex = index;
-          _navigationViews[_currentIndex].controller.forward();
-        });
-      },
-    );
-
-    return Scaffold(
-      appBar: AppBar(
-        title: IconHelper().getTitleLogo(120.0, 48.0),
-        actions: <Widget>[
-          PopupMenuButton<String>(
-            onSelected: (String value) {
-              FirebaseAuth.instance.signOut();
-            },
-            itemBuilder: (BuildContext context) =>
-                <PopupMenuItem<String>>[
-                  PopupMenuItem<String>(
-                    value: 'Log out',
-                    child: Text('Log out'),
+    return StreamBuilder<BlocEvent>(
+        stream: widget.bloc.navigationStream,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            widget.bloc.initNavigation();
+            return LoadingWidget();
+          } else {
+            return Scaffold(
+              appBar: AppBar(
+                title: IconHelper().getTitleLogo(120.0, 48.0),
+                actions: <Widget>[
+                  PopupMenuButton<String>(
+                    onSelected: (String value)  => widget.bloc.logoutCall(),
+                    itemBuilder: (BuildContext context) =>
+                    <PopupMenuItem<String>>[
+                      PopupMenuItem<String>(
+                        value: SIGN_OUT,
+                        child: Text(SIGN_OUT),
+                      )
+                    ],
                   )
                 ],
-          )
-        ],
-      ),
-      body: Center(child: _buildTransitionsStack()),
-      bottomNavigationBar: botNavBar,
+              ),
+              body: _navigationViews[(snapshot.data as NavigatorEvent).index].bodyItem,
+              bottomNavigationBar: BottomNavigationBar(
+                items: _navigationViews
+                    .map((navigationView) => navigationView.barItem).toList(),
+                currentIndex: (snapshot.data as NavigatorEvent).index,
+                type: BottomNavigationBarType.shifting,
+                onTap: (int index) {
+                  widget.bloc.events.add(NavigatorEvent(index));
+                },
+              ),
+            );
+          }
+        }
     );
   }
 }

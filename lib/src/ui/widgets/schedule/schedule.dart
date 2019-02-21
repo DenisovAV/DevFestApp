@@ -1,21 +1,22 @@
-import 'package:devfest_flutter_app/src/bloc/schedule/schedule_bloc.dart';
+import 'package:devfest_flutter_app/src/bloc/main/main_bloc.dart';
 import 'package:devfest_flutter_app/src/models/schedule.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/schedule/session_widget.dart';
 import 'package:devfest_flutter_app/src/models/session.dart';
 import 'package:devfest_flutter_app/src/models/speaker.dart';
 import 'package:devfest_flutter_app/src/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ScheduleWidget extends StatefulWidget {
-  _SingleScheduleWidgetState createState() => _SingleScheduleWidgetState(track);
+  _SingleScheduleWidgetState createState() => _SingleScheduleWidgetState(track, bloc);
   final Track track;
-  ScheduleWidget(this.track);
+  final MainBloc bloc;
+  ScheduleWidget(this.track, this.bloc);
 }
 
 class _SingleScheduleWidgetState extends State<ScheduleWidget> {
-  Track track;
-  _SingleScheduleWidgetState(this.track);
+  final Track track;
+  final MainBloc bloc;
+  _SingleScheduleWidgetState(this.track, this.bloc);
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +32,14 @@ class _SingleScheduleWidgetState extends State<ScheduleWidget> {
   }
 
   _buildListItem(BuildContext context, schedule) {
-    return TimeslotTile(schedule);
+    return TimeslotTile(schedule, bloc);
   }
 }
 
 class TimeslotTile extends StatelessWidget {
-  TimeslotTile(this.timeslot);
+  TimeslotTile(this.timeslot, this.bloc);
 
+  final MainBloc bloc;
   final Timeslot timeslot;
 /*
 
@@ -67,8 +69,7 @@ class TimeslotTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ScheduleBloc _scheduleBloc = BlocProvider.of<ScheduleBloc>(context);
-    final List<Session> sessions = _scheduleBloc.sessions
+    final List<Session> sessions = bloc.sessions
         .where((session) => timeslot.sessions.contains(session.id))
         .toList();
     return InkWell(
@@ -77,7 +78,7 @@ class TimeslotTile extends StatelessWidget {
           context,
           timeslot,
           sessions.first,
-          _scheduleBloc.speakers
+          bloc.speakers
               .where((speaker) => sessions.first.speakers.contains(speaker.id))
               .toList()),
       child: Padding(
@@ -106,7 +107,7 @@ class TimeslotTile extends StatelessWidget {
                   children: <Widget>[
                     TitleWidget(timeslot, sessions),
                     DescriptionWidget(timeslot, sessions),
-                    SpeakerChipWidget(timeslot, sessions),
+                    SpeakerChipWidget(timeslot, sessions, bloc),
                   ],
                 ),
               ),
@@ -146,14 +147,14 @@ class SlideRightRoute extends PageRouteBuilder {
 
 //  builder: (context) => SessionView(timeslot, session)));
 class SpeakerChipWidget extends GenericScheduleWidget {
-  SpeakerChipWidget(Timeslot timeslot, List<Session> sessions)
+  final MainBloc bloc;
+  SpeakerChipWidget(Timeslot timeslot, List<Session> sessions, this.bloc)
       : super(timeslot, sessions);
 
   @override
   Widget build(BuildContext context) {
     if (sessions[0].complexity != null) {
-      final ScheduleBloc _scheduleBloc = BlocProvider.of<ScheduleBloc>(context);
-      final List<Speaker> speakers = _scheduleBloc.speakers
+      final List<Speaker> speakers = bloc.speakers
           .where((speaker) => sessions[0].speakers.contains(speaker.id))
           .toList();
       if (speakers.length > 0) {
@@ -219,7 +220,7 @@ class StartTimeWidget extends GenericScheduleWidget {
 
   @override
   Widget build(BuildContext context) {
-    var color = ColorUtils.hexToColor("#676767");
+    var color = Utils.hexToColor("#676767");
 
     if (sessions.first.speakers.isNotEmpty) {
       color = Colors.blueAccent;

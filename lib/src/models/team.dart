@@ -47,7 +47,7 @@ class Team extends Equatable{
   bool get isValid => members != null;
 
   @override
-  String toString() => 'Team {id: $id, title: $title}';
+  String toString() => 'Team {id: $id, title: $title, members: $members}';
 
   Team.fromMap(Map<dynamic, dynamic> data, String documentId): this(
     id: documentId,

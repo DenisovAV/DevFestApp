@@ -1,5 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devfest_flutter_app/src/bloc/auth/auth_bloc_state.dart';
+import 'package:devfest_flutter_app/src/bloc/main/main_bloc.dart';
+import 'package:devfest_flutter_app/src/resources/repository.dart';
+import 'package:devfest_flutter_app/src/ui/screens/main/main_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:devfest_flutter_app/src/bloc/auth/auth_bloc.dart';
 import 'package:devfest_flutter_app/src/bloc/auth/auth_bloc_event.dart';
@@ -7,7 +11,6 @@ import 'package:devfest_flutter_app/src/resources/abstracts/abstract_repositorie
 import 'package:devfest_flutter_app/src/resources/user_repository.dart';
 import 'package:devfest_flutter_app/src/ui/screens/login/sign_in_page.dart';
 import 'package:devfest_flutter_app/src/ui/screens/login/splash_page.dart';
-import 'package:devfest_flutter_app/src/ui/screens/main/main_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -45,7 +48,7 @@ class MyApp extends StatelessWidget {
         home: AppPage(userRepository: FirebaseUserRepository(FirebaseAuth.instance, GoogleSignIn())),
         //navigatorObservers: <NavigatorObserver>[observer],
         routes: <String, WidgetBuilder>{
-          '/HomePage': (BuildContext context) => MainPage(),
+          '/HomePage': (BuildContext context) => MainPage(MainBloc(FirestoreRepository(Firestore.instance))),
           '/LoginPage': (BuildContext context) => SignInPage(),
           '/AppPage': (BuildContext context) => AppPage(),
         });
@@ -63,12 +66,14 @@ class AppPage extends StatefulWidget {
 
 class AppPageState extends State<AppPage> {
   AuthBloc _authenticationBloc;
+  MainBloc _mainBloc;
   UserRepository _userRepository;
 
   @override
   void initState() {
     _userRepository = widget.userRepository;
     _authenticationBloc = AuthBloc(userRepository: _userRepository);
+    _mainBloc = MainBloc(FirestoreRepository(Firestore.instance), logoutCall: ()=>_userRepository.logout());
     _authenticationBloc.dispatch(AppStarted());
     super.initState();
   }
@@ -76,6 +81,7 @@ class AppPageState extends State<AppPage> {
   @override
   void dispose() {
     _authenticationBloc.dispose();
+    _mainBloc.dispose();
     super.dispose();
   }
 
@@ -91,7 +97,7 @@ class AppPageState extends State<AppPage> {
               return SplashPage();
             }
             if (state is AuthLoggedIn) {
-              return MainPage(user: state.user);
+              return MainPage(_mainBloc, user: state.user);
             }
             if (state is AuthLoggedOut) {
               return SignInPage(userRepository: _userRepository);

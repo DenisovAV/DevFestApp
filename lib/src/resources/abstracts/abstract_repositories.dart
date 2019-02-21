@@ -10,6 +10,7 @@ enum AuthType { google, anonymous }
 
 abstract class UserRepository {
   Future<User> login(AuthType authType);
+  Future<void> logout();
   Stream<User> getAuthorizedUser();
 }
 

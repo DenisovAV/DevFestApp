@@ -7,7 +7,6 @@ class User extends Equatable {
 
   User({this.id, this.name, this.photoUrl})
       : assert(id != null),
-        assert(name != null),
         super([id, name, photoUrl]);
 
   @override

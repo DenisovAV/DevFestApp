@@ -8,79 +8,115 @@ import 'package:devfest_flutter_app/src/models/team.dart';
 import 'package:devfest_flutter_app/src/models/ticket.dart';
 import 'package:devfest_flutter_app/src/resources/abstracts/abstract_repositories.dart';
 
+typedef Future<void> LogoutCall();
+
 class MainBloc {
   final Repository repository;
+  LogoutCall logoutCall;
   List<Team> teams = List<Team>();
   List<Speaker> speakers = List<Speaker>();
   List<Schedule> schedules = List<Schedule>();
   List<Ticket> tickets = List<Ticket>();
   List<Session> sessions = List<Session>();
 
-  bool get isSessionsLoaded => sessions!=null && sessions.isNotEmpty;
-  bool get isScheduleLoaded => schedules!=null && schedules.isNotEmpty;
-  bool get isSpeakerLoaded => speakers!=null && speakers.isNotEmpty;
+  bool get _isSessionsLoaded => sessions!=null && sessions.isNotEmpty;
+  bool get _isScheduleLoaded => schedules!=null && schedules.isNotEmpty;
+  bool get _isSpeakerLoaded => speakers!=null && speakers.isNotEmpty;
+  bool get _isTeamLoaded => teams!=null && teams.isNotEmpty;
+  bool get _isTicketsLoaded => tickets!=null && tickets.isNotEmpty;
 
-  final teamController = StreamController<BlocEvent>();
-  final speakerController = StreamController<BlocEvent>();
-  final ticketController = StreamController<BlocEvent>();
-  final scheduleController = StreamController<BlocEvent>();
+  StreamController<BlocEvent> repositoryController = StreamController<BlocEvent>.broadcast();
+  StreamController<BlocEvent> eventsController = StreamController<BlocEvent>.broadcast();
 
-  Stream<BlocEvent> get teamsStream => teamController.stream;
-  Stream<BlocEvent> get speakersStream => speakerController.stream;
-  Stream<BlocEvent> get ticketsStream => ticketController.stream;
-  Stream<BlocEvent> get schedulesStream => scheduleController.stream;
+  Stream<BlocEvent> get teamsStream => repositoryController.stream.where((event)=> event is TeamLoadedEvent);
+  Stream<BlocEvent> get speakersStream => repositoryController.stream.where((event)=> event is SpeakersLoadedEvent);
+  Stream<BlocEvent> get ticketsStream => repositoryController.stream.where((event)=> event is TicketsLoadedEvent);
+  Stream<BlocEvent> get schedulesStream => repositoryController.stream.where((event)=> event is SchedulesLoadedEvent);
+  Stream<BlocEvent> get navigationStream => eventsController.stream.where((event)=> event is NavigatorEvent);
+  Stream<BlocEvent> get authStream => eventsController.stream.where((event)=> event is LogoutEvent);
+  Sink<BlocEvent> get events => eventsController.sink;
 
-  MainBloc(this.repository) : assert(repository != null) {
-    init();
-  }
-
-  init() {
+  MainBloc(this.repository, {this.logoutCall}) : assert(repository != null) {
     repository.getTickets().listen(_onTicketsLoaded);
     repository.getTeams().listen(_onTeamsLoaded);
     repository.getSchedules().listen(_onSchedulesLoaded);
     repository.getSessions().listen(_onSessionsLoaded);
     repository.getSpeakers().listen(_onSpeakersLoaded);
+   // init();
   }
+
+  bool isRepoLoaded(BlocEvent event){
+    event.runtimeType;
+    switch (event.runtimeType) {
+      case SchedulesLoadedEvent:
+        return _isSessionsLoaded && _isSpeakerLoaded && _isScheduleLoaded;
+      case TicketsLoadedEvent:
+        return _isTicketsLoaded;
+      case SpeakersLoadedEvent:
+        return _isSpeakerLoaded;
+      case TeamLoadedEvent:
+        return _isTeamLoaded;
+      default: // Without this, you see a WARNING.
+        return false; // 'Color.blue'
+    }
+  }
+
+
+  checkRepo(BlocEvent event) {
+    if (isRepoLoaded(event)) {
+      repositoryController.sink.add(event);
+    }
+  }
+
+  initNavigation() {
+    events.add(NavigatorEvent(0));
+  }
+
+
 
   _onTeamsLoaded(List<Team> teams) {
     this.teams = teams;
     this.teams
         .forEach((team) => repository.getMembers(team.id).listen((members) {
               team.members = members;
-              teamController.sink.add(TeamLoadedEvent());
+              repositoryController.sink.add(TeamLoadedEvent());
             }));
   }
 
   _onSpeakersLoaded(List<Speaker> speakers) {
     this.speakers = speakers;
-    speakerController.sink.add(SpeakersLoadedEvent());
-    if(isSessionsLoaded && isSpeakerLoaded) {
-      scheduleController.sink.add(SchedulesLoadedEvent());
+    repositoryController.sink.add(SpeakersLoadedEvent());
+    if(_isSessionsLoaded && _isSpeakerLoaded) {
+      repositoryController.sink.add(SchedulesLoadedEvent());
     }
   }
 
   _onSessionsLoaded(List<Session> sessions) {
-    if(isSpeakerLoaded && isScheduleLoaded) {
-      scheduleController.sink.add(SchedulesLoadedEvent());
+    this.sessions=sessions;
+    if(_isSpeakerLoaded && _isScheduleLoaded) {
+      repositoryController.sink.add(SchedulesLoadedEvent());
     }
   }
 
   _onSchedulesLoaded(List<Schedule> schedules) {
-    if(isSpeakerLoaded && isSessionsLoaded) {
-      scheduleController.sink.add(SchedulesLoadedEvent());
+    this.schedules=schedules;
+    if(_isSpeakerLoaded && _isSessionsLoaded) {
+      repositoryController.sink.add(SchedulesLoadedEvent());
     }
   }
 
   _onTicketsLoaded(List<Ticket> tickets) {
     this.tickets = tickets;
-    ticketController.sink.add(TicketsLoadedEvent());
+    repositoryController.sink.add(TicketsLoadedEvent());
   }
 
 
   void dispose() {
-    teamController?.close();
-    speakerController?.close();
-    ticketController?.close();
-    scheduleController?.close();
+    repositoryController?.close();
+    eventsController?.close();
+  }
+
+  void logout(){
+    logoutCall();
   }
 }
