@@ -31,6 +31,13 @@ class Member extends Equatable {
       title: data[TITLE],
       socials: Social.fromList(data[SOCIALS]),
     );
+
+  Map<String, Object> toJson() => {
+    TITLE: title,
+    NAME: name,
+    PHOTO_URL: photoUrl,
+    SOCIALS: Social.toList(socials)
+  };
 }
 
 class Team extends Equatable{
@@ -53,4 +60,8 @@ class Team extends Equatable{
     id: documentId,
     title: data[TITLE],
   );
+
+  Map<String, Object> toJson() => {
+    TITLE: title
+  };
 }
