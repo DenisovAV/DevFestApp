@@ -49,7 +49,7 @@ class _TeamMembersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 180.0 * ((team.members.length / 2).truncate() + 1) + 35.0,
+        height: 180.0 * ((team.members.length + 1) / 2).truncate() + 35.0,
         margin: EdgeInsets.symmetric(
           vertical: 12.0,
           horizontal: 24.0,
@@ -180,7 +180,7 @@ class _TeamTitleText extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 4.0),
       alignment: Alignment.center,
-      child: Text(text, style: Utils.headerTextStyle()),
+      child: Text(text, style: Utils.headerTextStyle(Colors.white)),
     );
   }
 }

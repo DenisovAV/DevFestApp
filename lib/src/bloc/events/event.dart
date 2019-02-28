@@ -16,6 +16,14 @@ class TeamLoadedEvent extends BlocEvent {
 
 }
 
+
+class PartnersLoadedEvent extends BlocEvent {
+
+  @override
+  String toString() => 'PartnersLoadedEvent';
+
+}
+
 class TicketsLoadedEvent extends BlocEvent {
 
   @override

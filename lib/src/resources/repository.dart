@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:devfest_flutter_app/src/models/partner.dart';
 import 'package:devfest_flutter_app/src/models/schedule.dart';
 import 'package:devfest_flutter_app/src/models/session.dart';
 import 'package:devfest_flutter_app/src/models/speaker.dart';
@@ -12,7 +13,9 @@ class FirestoreRepository extends Repository {
   static const String SCHEDULE_COLLECTION = 'schedule';
   static const String SPEAKERS_COLLECTION = 'speakers';
   static const String TEAM_COLLECTION = 'team';
+  static const String PARTNER_COLLECTION = 'partners';
   static const String MEMBERS_COLLECTION = 'members';
+  static const String LOGOS_COLLECTION = 'items';
   static const String TICKETS_COLLECTION = 'tickets';
 
   final Firestore firestore;
@@ -71,24 +74,29 @@ class FirestoreRepository extends Repository {
               .map((doc) => Session.fromMap(doc.data, doc.documentID))
               .toList());
 
-  Stream<Speaker> getSpeakerById(String id) => firestore
-      .collection(SPEAKERS_COLLECTION)
-      .document(id)
-      .snapshots()
-      .map((snapshot) => Speaker.fromMap(snapshot.data, snapshot.documentID));
+  Stream<Speaker> getSpeakerById(String id) =>
+      firestore
+          .collection(SPEAKERS_COLLECTION)
+          .document(id)
+          .snapshots()
+          .map((snapshot) =>
+          Speaker.fromMap(snapshot.data, snapshot.documentID));
 
-  Stream<List<Speaker>> getSpeakersByIds(List<String> idList) => firestore
-      .collection(SPEAKERS_COLLECTION)
-      .snapshots()
-      .map((snapshot) => snapshot.documents
-      .where((snapshot) => idList.contains(snapshot.documentID))
-      .map((doc) => Speaker.fromMap(doc.data, doc.documentID))
-      .toList());
+  Stream<List<Speaker>> getSpeakersByIds(List<String> idList) =>
+      firestore
+          .collection(SPEAKERS_COLLECTION)
+          .snapshots()
+          .map((snapshot) =>
+          snapshot.documents
+              .where((snapshot) => idList.contains(snapshot.documentID))
+              .map((doc) => Speaker.fromMap(doc.data, doc.documentID))
+              .toList());
 
-  Future<void> updateSpeaker(Speaker speaker) => firestore
-      .collection(SPEAKERS_COLLECTION)
-      .document(speaker.id)
-      .updateData(speaker.toJson());
+  Future<void> updateSpeaker(Speaker speaker) =>
+      firestore
+          .collection(SPEAKERS_COLLECTION)
+          .document(speaker.id)
+          .updateData(speaker.toJson());
 
   Stream<List<Team>> getTeams() =>
       firestore
@@ -99,22 +107,43 @@ class FirestoreRepository extends Repository {
               .map((doc) => Team.fromMap(doc.data, doc.documentID))
               .toList());
 
-  Stream<List<Member>> getMembers(String team) {
-    return firestore.collection(TEAM_COLLECTION)
-        .document(team)
-        .collection(MEMBERS_COLLECTION)
-        .snapshots()
-        .map((snapshot) =>
-        snapshot.documents
-            .map((doc) => Member.fromMap(doc.data))
-            .toList());
-  }
+  Stream<List<Member>> getMembers(String team) =>
+      firestore.collection(TEAM_COLLECTION)
+          .document(team)
+          .collection(MEMBERS_COLLECTION)
+          .snapshots()
+          .map((snapshot) =>
+          snapshot.documents
+              .map((doc) => Member.fromMap(doc.data))
+              .toList());
+
 
   Stream<List<Ticket>> getTickets() =>
       firestore
           .collection(TICKETS_COLLECTION)
           .snapshots()
-          .map((snapshot) => snapshot.documents
-          .map((doc) => Ticket.fromMap(doc.data))
-          .toList());
+          .map((snapshot) =>
+          snapshot.documents
+              .map((doc) => Ticket.fromMap(doc.data))
+              .toList());
+
+  Stream<List<Partner>> getPartners() =>
+      firestore
+          .collection(PARTNER_COLLECTION)
+          .snapshots()
+          .map((snapshot) =>
+          snapshot.documents
+              .map((doc) => Partner.fromMap(doc.data, doc.documentID))
+              .toList());
+
+  Stream<List<Logo>> getLogos(String partner) {
+    return firestore.collection(PARTNER_COLLECTION)
+        .document(partner)
+        .collection(LOGOS_COLLECTION)
+        .snapshots()
+        .map((snapshot) =>
+        snapshot.documents
+            .map((doc) => Logo.fromMap(doc.data))
+            .toList());
+  }
 }

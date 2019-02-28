@@ -40,6 +40,7 @@ flutter:
 
   assets:
    - assets/images/fon1.png
+   - assets/images/fon2.png
    - assets/images/speaker.jpg
    - assets/images/home.jpg
    - assets/images/team.jpg

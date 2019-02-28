@@ -159,6 +159,44 @@ main() {
     });
   });
 
+  group('Partner', () {
+    test('should listen for updates to the partners collection', () {
+      final collection = MockCollectionReference();
+      final snapshot = MockQuerySnapshot();
+      final snapshots = Stream.fromIterable([snapshot]);
+      final document = MockDocumentSnapshot(testPartner.toJson());
+      final repository = FirestoreRepository(firestore);
+
+      when(firestore.collection(FirestoreRepository.PARTNER_COLLECTION))
+          .thenReturn(collection);
+      when(collection.snapshots()).thenAnswer((_) => snapshots);
+      when(snapshot.documents).thenReturn([document]);
+      when(document.documentID).thenReturn(testPartner.id);
+
+      expect(repository.getPartners(), emits([testPartner]));
+    });
+
+    test('should listen for updates to the team logos collection', () {
+      final collection = MockCollectionReference();
+      final snapshot = MockQuerySnapshot();
+      final snapshots = Stream.fromIterable([snapshot]);
+      final document = MockDocumentSnapshot(testMember.toJson());
+      final repository = FirestoreRepository(firestore);
+      final memberCollection = MockCollectionReference();
+      final documentRef = MockDocumentReference();
+
+      when(firestore.collection(FirestoreRepository.PARTNER_COLLECTION))
+          .thenReturn(collection);
+      when(collection.document(testPartner.id)).thenAnswer((_) => documentRef);
+      when(documentRef.collection(FirestoreRepository.LOGOS_COLLECTION))
+          .thenReturn(memberCollection);
+      when(memberCollection.snapshots()).thenAnswer((_) => snapshots);
+      when(snapshot.documents).thenReturn([document]);
+
+      expect(repository.getMembers(testPartner.id), emits([testLogo]));
+    });
+  });
+
   group('Schedule', () {
     test('should listen for updates to the collection', () {
       final collection = MockCollectionReference();

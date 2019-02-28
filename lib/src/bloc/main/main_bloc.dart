@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:devfest_flutter_app/src/bloc/events/event.dart';
+import 'package:devfest_flutter_app/src/models/partner.dart';
 import 'package:devfest_flutter_app/src/models/schedule.dart';
 import 'package:devfest_flutter_app/src/models/session.dart';
 import 'package:devfest_flutter_app/src/models/speaker.dart';
@@ -14,6 +15,7 @@ class MainBloc {
   final Repository repository;
   LogoutCall logoutCall;
   List<Team> teams = List<Team>();
+  List<Partner> partners = List();
   List<Speaker> speakers = List<Speaker>();
   List<Schedule> schedules = List<Schedule>();
   List<Ticket> tickets = List<Ticket>();
@@ -23,11 +25,13 @@ class MainBloc {
   bool get _isScheduleLoaded => schedules!=null && schedules.isNotEmpty;
   bool get _isSpeakerLoaded => speakers!=null && speakers.isNotEmpty;
   bool get _isTeamLoaded => teams!=null && teams.isNotEmpty;
+  bool get _isPartnersLoaded => partners!=null && partners.isNotEmpty;
   bool get _isTicketsLoaded => tickets!=null && tickets.isNotEmpty;
 
   StreamController<BlocEvent> repositoryController = StreamController<BlocEvent>.broadcast();
   StreamController<BlocEvent> eventsController = StreamController<BlocEvent>.broadcast();
 
+  Stream<BlocEvent> get partnersStream => repositoryController.stream.where((event)=> event is PartnersLoadedEvent);
   Stream<BlocEvent> get teamsStream => repositoryController.stream.where((event)=> event is TeamLoadedEvent);
   Stream<BlocEvent> get speakersStream => repositoryController.stream.where((event)=> event is SpeakersLoadedEvent);
   Stream<BlocEvent> get ticketsStream => repositoryController.stream.where((event)=> event is TicketsLoadedEvent);
@@ -42,6 +46,7 @@ class MainBloc {
     repository.getSchedules().listen(_onSchedulesLoaded);
     repository.getSessions().listen(_onSessionsLoaded);
     repository.getSpeakers().listen(_onSpeakersLoaded);
+    repository.getPartners().listen(_onPartnersLoaded);
    // init();
   }
 
@@ -56,8 +61,10 @@ class MainBloc {
         return _isSpeakerLoaded;
       case TeamLoadedEvent:
         return _isTeamLoaded;
-      default: // Without this, you see a WARNING.
-        return false; // 'Color.blue'
+      case PartnersLoadedEvent:
+        return _isPartnersLoaded;
+      default:
+        return false;
     }
   }
 
@@ -81,6 +88,17 @@ class MainBloc {
               team.members = members;
               repositoryController.sink.add(TeamLoadedEvent());
             }));
+  }
+
+  _onPartnersLoaded(List<Partner> partners) {
+    print(partners);
+    this.partners = partners;
+    this.partners
+        .forEach((partner) => repository.getLogos(partner.id).listen((logos) {
+          print(logos);
+      partner.logos= logos;
+      repositoryController.sink.add(PartnersLoadedEvent());
+    }));
   }
 
   _onSpeakersLoaded(List<Speaker> speakers) {
