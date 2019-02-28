@@ -19,7 +19,6 @@ class PartnerPage extends StatelessWidget {
             bloc.checkRepo(TeamLoadedEvent());
             return LoadingWidget();
           } else {
-            print(bloc.partners);
             return PartnersWidget(bloc.partners);
           }
         }

@@ -1,5 +1,6 @@
 import 'package:devfest_flutter_app/src/models/partner.dart';
 import 'package:devfest_flutter_app/src/utils/colors.dart';
+import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/material.dart';
 
 class PartnersWidget extends StatelessWidget {
@@ -120,7 +121,7 @@ class _LogoSign extends StatelessWidget {
         child: SizedBox(
             width: 140.0,
             height: 60.0,
-            child: Image(image: NetworkImage(logoUrl))));
+            child: LogoImage(logoUrl)));
   }
 }
 

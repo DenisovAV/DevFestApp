@@ -20,9 +20,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthState currentState,
     AuthEvent event,
   ) => userRepository.getAuthorizedUser().map(
-            (user) {
-  print('alse');
-              print(user);
-              return (user != null ? AuthLoggedIn(user: user): AuthLoggedOut());});
+            (user) => (user != null ? AuthLoggedIn(user: user): AuthLoggedOut()));
 
 }

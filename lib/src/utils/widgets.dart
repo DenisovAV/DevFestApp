@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class LoadingWidget extends StatelessWidget {
   @override
@@ -18,12 +19,24 @@ class CircleImage extends StatelessWidget {
     return Container(
         width: 92.0,
         height: 92.0,
-        decoration: new BoxDecoration(
+        decoration: BoxDecoration(
             shape: BoxShape.circle,
-            image: new DecorationImage(
+            image: DecorationImage(
                 fit: BoxFit.fill,
                 image: image
             )
         ));
+  }
+}
+
+class LogoImage extends StatelessWidget {
+
+  String url;
+
+  LogoImage(this.url);
+
+  Widget build(BuildContext context) {
+    return url.contains('.svg') ? SvgPicture.network(url) : Image(
+        image: NetworkImage(url));
   }
 }

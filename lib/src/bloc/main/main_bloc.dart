@@ -91,11 +91,9 @@ class MainBloc {
   }
 
   _onPartnersLoaded(List<Partner> partners) {
-    print(partners);
     this.partners = partners;
     this.partners
         .forEach((partner) => repository.getLogos(partner.id).listen((logos) {
-          print(logos);
       partner.logos= logos;
       repositoryController.sink.add(PartnersLoadedEvent());
     }));
