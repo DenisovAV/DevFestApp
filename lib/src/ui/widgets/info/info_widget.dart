@@ -1,16 +1,12 @@
-import 'package:devfest_flutter_app/src/bloc/main/main_bloc.dart';
 import 'package:devfest_flutter_app/src/ui/screens/partner/partner_page.dart';
 import 'package:devfest_flutter_app/src/ui/screens/team/team_page.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/info/venue_widget.dart';
 import 'package:devfest_flutter_app/src/utils/colors.dart';
-import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/material.dart';
 
 class InfoTabWidget extends StatelessWidget {
 
-  final MainBloc bloc;
-
-  InfoTabWidget(this.bloc);
+  InfoTabWidget();
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +22,7 @@ class InfoTabWidget extends StatelessWidget {
               Tab(child: TabTextTheme("About")),
             ],
           ),
-          Expanded(child: TabBarView(children: <Widget>[TeamPage(bloc), PartnerPage(bloc), MapsDemo()])),
+          Expanded(child: TabBarView(children: <Widget>[TeamPage(), PartnerPage(), MapsDemo()])),
         ],
       ),
     );

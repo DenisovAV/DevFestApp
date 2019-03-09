@@ -1,5 +1,6 @@
-import 'package:devfest_flutter_app/src/bloc/main/main_bloc.dart';
+import 'package:devfest_flutter_app/src/bloc/data/data_bloc.dart';
 import 'package:devfest_flutter_app/src/models/schedule.dart';
+import 'package:devfest_flutter_app/src/providers/bloc_provider.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/schedule/session_widget.dart';
 import 'package:devfest_flutter_app/src/models/session.dart';
 import 'package:devfest_flutter_app/src/models/speaker.dart';
@@ -7,16 +8,14 @@ import 'package:devfest_flutter_app/src/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class ScheduleWidget extends StatefulWidget {
-  _SingleScheduleWidgetState createState() => _SingleScheduleWidgetState(track, bloc);
+  _SingleScheduleWidgetState createState() => _SingleScheduleWidgetState(track);
   final Track track;
-  final MainBloc bloc;
-  ScheduleWidget(this.track, this.bloc);
+  ScheduleWidget(this.track);
 }
 
 class _SingleScheduleWidgetState extends State<ScheduleWidget> {
   final Track track;
-  final MainBloc bloc;
-  _SingleScheduleWidgetState(this.track, this.bloc);
+  _SingleScheduleWidgetState(this.track);
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +31,13 @@ class _SingleScheduleWidgetState extends State<ScheduleWidget> {
   }
 
   _buildListItem(BuildContext context, schedule) {
-    return TimeslotTile(schedule, bloc);
+    return TimeslotTile(schedule);
   }
 }
 
 class TimeslotTile extends StatelessWidget {
-  TimeslotTile(this.timeslot, this.bloc);
+  TimeslotTile(this.timeslot);
 
-  final MainBloc bloc;
   final Timeslot timeslot;
 /*
 
@@ -69,6 +67,7 @@ class TimeslotTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DataBloc bloc = BlocMProvider.of(context).data;
     final List<Session> sessions = bloc.sessions
         .where((session) => timeslot.sessions.contains(session.id))
         .toList();
@@ -107,7 +106,7 @@ class TimeslotTile extends StatelessWidget {
                   children: <Widget>[
                     TitleWidget(timeslot, sessions),
                     DescriptionWidget(timeslot, sessions),
-                    SpeakerChipWidget(timeslot, sessions, bloc),
+                    SpeakerChipWidget(timeslot, sessions),
                   ],
                 ),
               ),
@@ -147,12 +146,12 @@ class SlideRightRoute extends PageRouteBuilder {
 
 //  builder: (context) => SessionView(timeslot, session)));
 class SpeakerChipWidget extends GenericScheduleWidget {
-  final MainBloc bloc;
-  SpeakerChipWidget(Timeslot timeslot, List<Session> sessions, this.bloc)
+  SpeakerChipWidget(Timeslot timeslot, List<Session> sessions)
       : super(timeslot, sessions);
 
   @override
   Widget build(BuildContext context) {
+    final DataBloc bloc = BlocMProvider.of(context).data;
     if (sessions[0].complexity != null) {
       final List<Speaker> speakers = bloc.speakers
           .where((speaker) => sessions[0].speakers.contains(speaker.id))

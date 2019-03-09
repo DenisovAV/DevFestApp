@@ -1,17 +1,17 @@
 import 'package:devfest_flutter_app/src/bloc/events/event.dart';
-import 'package:devfest_flutter_app/src/bloc/main/main_bloc.dart';
+import 'package:devfest_flutter_app/src/bloc/data/data_bloc.dart';
+import 'package:devfest_flutter_app/src/providers/bloc_provider.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/info/partners_widget.dart';
 import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/material.dart';
 
 class PartnerPage extends StatelessWidget {
-  final MainBloc bloc;
-  PartnerPage(this.bloc, {Key key})
-      : assert(bloc != null),
-        super(key: key);
+  PartnerPage({Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final DataBloc bloc = BlocMProvider.of(context).data;
     return StreamBuilder<BlocEvent>(
         stream: bloc.teamsStream,
         builder: (context, snapshot) {

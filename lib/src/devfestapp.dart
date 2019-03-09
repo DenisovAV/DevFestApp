@@ -1,12 +1,10 @@
-import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:devfest_flutter_app/src/bloc/auth/auth_bloc_state.dart';
-import 'package:devfest_flutter_app/src/bloc/main/main_bloc.dart';
+import 'package:devfest_flutter_app/src/bloc/data/data_bloc.dart';
+import 'package:devfest_flutter_app/src/bloc/events/event.dart';
+import 'package:devfest_flutter_app/src/providers/bloc_provider.dart';
 import 'package:devfest_flutter_app/src/resources/repository.dart';
 import 'package:devfest_flutter_app/src/ui/screens/main/main_page.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:devfest_flutter_app/src/bloc/auth/auth_bloc.dart';
-import 'package:devfest_flutter_app/src/bloc/auth/auth_bloc_event.dart';
 import 'package:devfest_flutter_app/src/resources/abstracts/abstract_repositories.dart';
 import 'package:devfest_flutter_app/src/resources/user_repository.dart';
 import 'package:devfest_flutter_app/src/ui/screens/login/sign_in_page.dart';
@@ -15,17 +13,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class SimpleBlocDelegate extends BlocDelegate {
-  @override
-  void onTransition(Transition transition) {
-    print(transition.toString());
-  }
-}
-
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return MaterialApp(
       theme: ThemeData.dark(),
       home: MyApp(),
@@ -35,7 +25,6 @@ class App extends StatelessWidget {
 
 //TODO - remove old code
 class MyApp extends StatelessWidget {
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -45,10 +34,12 @@ class MyApp extends StatelessWidget {
             brightness: Brightness.light,
             primarySwatch: Colors.blue,
             fontFamily: "GoogleSans"),
-        home: AppPage(userRepository: FirebaseUserRepository(FirebaseAuth.instance, GoogleSignIn())),
+        home: AppPage(
+            userRepository:
+                FirebaseUserRepository(FirebaseAuth.instance, GoogleSignIn())),
         //navigatorObservers: <NavigatorObserver>[observer],
         routes: <String, WidgetBuilder>{
-          '/HomePage': (BuildContext context) => MainPage(MainBloc(FirestoreRepository(Firestore.instance))),
+          '/HomePage': (BuildContext context) => MainPage(),
           '/LoginPage': (BuildContext context) => SignInPage(),
           '/AppPage': (BuildContext context) => AppPage(),
         });
@@ -66,45 +57,43 @@ class AppPage extends StatefulWidget {
 
 class AppPageState extends State<AppPage> {
   AuthBloc _authenticationBloc;
-  MainBloc _mainBloc;
-  UserRepository _userRepository;
+  DataBloc _dataBloc;
 
   @override
   void initState() {
-    _userRepository = widget.userRepository;
-    _authenticationBloc = AuthBloc(userRepository: _userRepository);
-    _mainBloc = MainBloc(FirestoreRepository(Firestore.instance), logoutCall: ()=>_userRepository.logout());
-    _authenticationBloc.dispatch(AppStarted());
+    _authenticationBloc = AuthBloc(widget.userRepository);
+    _dataBloc = DataBloc(FirestoreRepository(Firestore.instance));
     super.initState();
   }
 
   @override
   void dispose() {
     _authenticationBloc.dispose();
-    _mainBloc.dispose();
+    _dataBloc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AuthBloc>(
-      bloc: _authenticationBloc,
-      child: MaterialApp(
-        home: BlocBuilder<AuthEvent, AuthState>(
-          bloc: _authenticationBloc,
-          builder: (BuildContext context, AuthState state) {
-            if (state is AuthInit) {
-              return SplashPage();
-            }
-            if (state is AuthLoggedIn) {
-              return MainPage(_mainBloc, user: state.user);
-            }
-            if (state is AuthLoggedOut) {
-              return SignInPage(userRepository: _userRepository);
-            }
-          },
-        ),
-      ),
-    );
+    return BlocMProvider(
+        child: MaterialApp(
+            home: StreamBuilder(
+                stream: _authenticationBloc.authStream,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return SplashPage();
+                  } else {
+                    BlocEvent event = snapshot.data;
+                    if (event is LoggingInEvent) {
+                      return MainPage(user: _authenticationBloc.user);
+                    }
+                    if (event is LoggingOutEvent) {
+                      return SignInPage();
+                    }
+                    return SplashPage();
+                  }
+                })),
+        data: _dataBloc,
+        auth: _authenticationBloc);
   }
 }

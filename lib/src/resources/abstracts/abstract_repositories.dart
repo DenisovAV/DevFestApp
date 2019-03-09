@@ -1,4 +1,3 @@
-
 import 'package:devfest_flutter_app/src/models/partner.dart';
 import 'package:devfest_flutter_app/src/models/schedule.dart';
 import 'package:devfest_flutter_app/src/models/session.dart';

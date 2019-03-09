@@ -1,12 +1,13 @@
 import 'package:devfest_flutter_app/src/bloc/events/event.dart';
-import 'package:devfest_flutter_app/src/bloc/main/main_bloc.dart';
+import 'package:devfest_flutter_app/src/bloc/data/data_bloc.dart';
 import 'package:devfest_flutter_app/src/models/ticket.dart';
+import 'package:devfest_flutter_app/src/providers/bloc_provider.dart';
 import 'package:flutter/material.dart';
 
 typedef void TicketItemTapCallback(Ticket ticket);
 
 class TicketItem extends StatelessWidget {
-  TicketItem(this.ticket, { @required this.onBannerTap})
+  TicketItem(this.ticket, {@required this.onBannerTap})
       : assert(ticket != null && onBannerTap != null);
 
   final Ticket ticket;
@@ -51,14 +52,10 @@ class TicketItem extends StatelessWidget {
 }
 
 class HomePageViewer extends StatefulWidget {
-  final MainBloc bloc;
-
   @override
   _HomePageViewerState createState() => _HomePageViewerState();
 
-  HomePageViewer(this.bloc, {Key key})
-      : assert(bloc != null),
-        super(key: key);
+  HomePageViewer({Key key}) : super(key: key);
 }
 
 class _HomePageViewerState extends State<HomePageViewer>
@@ -73,6 +70,7 @@ class _HomePageViewerState extends State<HomePageViewer>
   }
 
   void showTicketsDialog<T>({BuildContext context, Widget child}) {
+    final DataBloc bloc = BlocMProvider.of(context).data;
     showDialog<T>(
       context: context,
       builder: (BuildContext context) => child,
@@ -81,13 +79,14 @@ class _HomePageViewerState extends State<HomePageViewer>
       if (value != null) {
         _scaffoldKey.currentState
             .showSnackBar(SnackBar(content: Text('You selected: $value')));
-        widget.bloc.events.add(TicketTappedEvent(value as Ticket));
+        bloc.events.add(TicketTappedEvent(value as Ticket));
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final DataBloc bloc = BlocMProvider.of(context).data;
     final ThemeData theme = Theme.of(context);
     return Theme(
       data: ThemeData(
@@ -148,7 +147,7 @@ class _HomePageViewerState extends State<HomePageViewer>
                           child: Text('VIEW HIGHLIGHTS',
                               style: TextStyle(color: Colors.white)),
                           onPressed: () =>
-                              widget.bloc.events.add(HighlightsTappedEvent()),
+                              bloc.events.add(HighlightsTappedEvent()),
                         ))),
                     Padding(
                         padding: EdgeInsets.only(top: 4.0, bottom: 12.0),
@@ -161,14 +160,13 @@ class _HomePageViewerState extends State<HomePageViewer>
                                 context: context,
                                 child: SimpleDialog(
                                     title: Text('Choose your ticket'),
-                                    children: widget.bloc.tickets
+                                    children: bloc.tickets
                                         .map(
-                                          (ticket) => TicketItem(
-                                              ticket,
-                                              onBannerTap: (ticket) => widget
-                                                  .bloc
+                                          (ticket) => TicketItem(ticket,
+                                              onBannerTap: (ticket) => bloc
                                                   .events
-                                                  .add(TicketTappedEvent(ticket))),
+                                                  .add(TicketTappedEvent(
+                                                      ticket))),
                                         )
                                         .toList()));
                           },

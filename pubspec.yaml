@@ -18,7 +18,6 @@ dependencies:
   google_sign_in: ^3.2.4
   cloud_functions: ^0.0.5
   equatable: ^0.1.6
-  flutter_bloc: ^0.5.1
   google_maps_flutter: ^0.2.0
 
 dev_dependencies:

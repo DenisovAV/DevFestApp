@@ -1,7 +1,8 @@
-
+import 'package:devfest_flutter_app/src/bloc/auth/auth_bloc.dart';
+import 'package:devfest_flutter_app/src/bloc/data/data_bloc.dart';
 import 'package:devfest_flutter_app/src/bloc/events/event.dart';
-import 'package:devfest_flutter_app/src/bloc/main/main_bloc.dart';
 import 'package:devfest_flutter_app/src/consts/strings.dart';
+import 'package:devfest_flutter_app/src/providers/bloc_provider.dart';
 import 'package:devfest_flutter_app/src/ui/screens/home/home_page.dart';
 import 'package:devfest_flutter_app/src/ui/screens/schedule/schedule_page.dart';
 import 'package:devfest_flutter_app/src/models/user.dart';
@@ -28,10 +29,9 @@ class NavigationItem {
 }
 
 class MainPage extends StatefulWidget {
-  MainPage(this.bloc, {this.user});
+  MainPage({this.user});
 
   final User user;
-  final MainBloc bloc;
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -46,22 +46,22 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     _navigationViews = <NavigationItem>[
       NavigationItem(
         icon: Icon(Icons.home),
-        widget: HomePage(widget.bloc),
+        widget: HomePage(),
         title: HOME,
       ),
       NavigationItem(
         icon: Icon(Icons.schedule),
-        widget: SchedulePage(widget.bloc),
+        widget: SchedulePage(),
         title: SCHEDULE,
       ),
       NavigationItem(
         icon: Icon(Icons.group),
-        widget: SpeakersPage(widget.bloc),
+        widget: SpeakersPage(),
         title: SPEAKERS,
       ),
       NavigationItem(
         icon: Icon(Icons.info),
-        widget: InfoTabWidget(widget.bloc),
+        widget: InfoTabWidget(),
         title: INFO,
       )
     ];
@@ -69,11 +69,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final DataBloc bloc = BlocMProvider.of(context).data;
+    final AuthBloc auth = BlocMProvider.of(context).auth;
     return StreamBuilder<BlocEvent>(
-        stream: widget.bloc.navigationStream,
+        stream: bloc.navigationStream,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            widget.bloc.initNavigation();
+            bloc.initNavigation();
             return LoadingWidget();
           } else {
             return Scaffold(
@@ -81,7 +83,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 title: IconHelper().getTitleLogo(120.0, 48.0),
                 actions: <Widget>[
                   PopupMenuButton<String>(
-                    onSelected: (String value)  => widget.bloc.logoutCall(),
+                    onSelected: (String value)  => auth.events.add(LogoutEvent()),
                     itemBuilder: (BuildContext context) =>
                     <PopupMenuItem<String>>[
                       PopupMenuItem<String>(
@@ -99,7 +101,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 currentIndex: (snapshot.data as NavigatorEvent).index,
                 type: BottomNavigationBarType.shifting,
                 onTap: (int index) {
-                  widget.bloc.events.add(NavigatorEvent(index));
+                  bloc.events.add(NavigatorEvent(index));
                 },
               ),
             );

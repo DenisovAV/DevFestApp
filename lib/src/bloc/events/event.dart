@@ -92,3 +92,32 @@ class LogoutEvent extends BlocEvent {
   String toString() => 'LogoutEvent';
 
 }
+
+class SignInGoogleEvent extends BlocEvent {
+
+  @override
+  String toString() => 'SignInGoogleEvent';
+
+}
+
+class SignInAnonimousEvent extends BlocEvent {
+
+  @override
+  String toString() => 'SignInAnonimousEvent';
+
+}
+
+
+class LoggingInEvent extends BlocEvent {
+
+  @override
+  String toString() => 'LoggingInEvent';
+
+}
+
+class LoggingOutEvent extends BlocEvent {
+
+  @override
+  String toString() => 'LoggingOutEvent';
+
+}

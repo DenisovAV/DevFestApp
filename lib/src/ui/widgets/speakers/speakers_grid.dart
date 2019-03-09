@@ -1,19 +1,19 @@
 import 'package:devfest_flutter_app/src/bloc/events/event.dart';
-import 'package:devfest_flutter_app/src/bloc/main/main_bloc.dart';
+import 'package:devfest_flutter_app/src/bloc/data/data_bloc.dart';
 import 'package:devfest_flutter_app/src/models/speaker.dart';
+import 'package:devfest_flutter_app/src/providers/bloc_provider.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/speakers/speakers_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class SpeakersGridViewer extends StatelessWidget {
-  final MainBloc speakerBloc;
 
-  SpeakersGridViewer(this.speakerBloc, {Key key})
-      : assert(speakerBloc != null),
-        super(key: key);
+  SpeakersGridViewer({Key key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final DataBloc bloc = BlocMProvider.of(context).data;
     final Orientation orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       body: Column(
@@ -29,11 +29,11 @@ class SpeakersGridViewer extends StatelessWidget {
                 padding: EdgeInsets.all(4.0),
                 childAspectRatio:
                 (orientation == Orientation.portrait) ? 1.0 : 1.3,
-                children: speakerBloc.speakers
+                children: bloc.speakers
                     .map<SpeakerGridItem>((_speaker) => SpeakerGridItem(
                     _speaker,
                     onBannerTap: (tapped) {
-                      speakerBloc.events.add(SpeakersTappedEvent(tapped));
+                      bloc.events.add(SpeakersTappedEvent(tapped));
                     }))
                     .toList(),
               ),

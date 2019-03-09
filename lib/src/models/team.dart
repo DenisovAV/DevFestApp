@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:devfest_flutter_app/src/models/social.dart';
 import 'package:equatable/equatable.dart';
 
