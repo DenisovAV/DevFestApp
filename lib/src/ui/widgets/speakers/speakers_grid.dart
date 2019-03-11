@@ -13,7 +13,7 @@ class SpeakersGridViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DataBloc bloc = BlocMProvider.of(context).data;
+    final DataBloc bloc = BlocProvider.of(context).data;
     final Orientation orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       body: Column(

@@ -8,7 +8,7 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthBloc auth = BlocMProvider.of(context).auth;
+    final AuthBloc auth = BlocProvider.of(context).auth;
     final logo = Hero(
       tag: 'hero-logo',
       child: CircleAvatar(

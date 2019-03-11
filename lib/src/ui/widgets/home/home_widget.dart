@@ -70,7 +70,7 @@ class _HomePageViewerState extends State<HomePageViewer>
   }
 
   void showTicketsDialog<T>({BuildContext context, Widget child}) {
-    final DataBloc bloc = BlocMProvider.of(context).data;
+    final DataBloc bloc = BlocProvider.of(context).data;
     showDialog<T>(
       context: context,
       builder: (BuildContext context) => child,
@@ -86,7 +86,7 @@ class _HomePageViewerState extends State<HomePageViewer>
 
   @override
   Widget build(BuildContext context) {
-    final DataBloc bloc = BlocMProvider.of(context).data;
+    final DataBloc bloc = BlocProvider.of(context).data;
     final ThemeData theme = Theme.of(context);
     return Theme(
       data: ThemeData(

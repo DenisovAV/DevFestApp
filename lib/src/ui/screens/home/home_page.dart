@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
       : super(key: key);
 
   Widget build(BuildContext context) {
-    final DataBloc bloc = BlocMProvider.of(context).data;
+    final DataBloc bloc = BlocProvider.of(context).data;
     return StreamBuilder<BlocEvent>(
         stream: bloc.ticketsStream,
         builder: (context, snapshot) {

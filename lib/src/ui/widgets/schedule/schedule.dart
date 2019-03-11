@@ -67,7 +67,7 @@ class TimeslotTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DataBloc bloc = BlocMProvider.of(context).data;
+    final DataBloc bloc = BlocProvider.of(context).data;
     final List<Session> sessions = bloc.sessions
         .where((session) => timeslot.sessions.contains(session.id))
         .toList();
@@ -144,14 +144,13 @@ class SlideRightRoute extends PageRouteBuilder {
         });
 }
 
-//  builder: (context) => SessionView(timeslot, session)));
 class SpeakerChipWidget extends GenericScheduleWidget {
   SpeakerChipWidget(Timeslot timeslot, List<Session> sessions)
       : super(timeslot, sessions);
 
   @override
   Widget build(BuildContext context) {
-    final DataBloc bloc = BlocMProvider.of(context).data;
+    final DataBloc bloc = BlocProvider.of(context).data;
     if (sessions[0].complexity != null) {
       final List<Speaker> speakers = bloc.speakers
           .where((speaker) => sessions[0].speakers.contains(speaker.id))

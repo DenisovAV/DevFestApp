@@ -69,8 +69,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final DataBloc bloc = BlocMProvider.of(context).data;
-    final AuthBloc auth = BlocMProvider.of(context).auth;
+    final DataBloc bloc = BlocProvider.of(context).data;
+    final AuthBloc auth = BlocProvider.of(context).auth;
     return StreamBuilder<BlocEvent>(
         stream: bloc.navigationStream,
         builder: (context, snapshot) {

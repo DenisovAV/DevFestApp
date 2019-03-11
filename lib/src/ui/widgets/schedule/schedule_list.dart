@@ -14,7 +14,7 @@ class ScheduleViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DataBloc bloc = BlocMProvider.of(context).data;
+    final DataBloc bloc = BlocProvider.of(context).data;
     Schedule schedule =
         bloc.schedules.firstWhere((schedule) => schedule.date == day);
     return DefaultTabController(

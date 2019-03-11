@@ -11,7 +11,7 @@ class PartnerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DataBloc bloc = BlocMProvider.of(context).data;
+    final DataBloc bloc = BlocProvider.of(context).data;
     return StreamBuilder<BlocEvent>(
         stream: bloc.teamsStream,
         builder: (context, snapshot) {

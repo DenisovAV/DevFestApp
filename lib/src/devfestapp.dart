@@ -25,7 +25,6 @@ class App extends StatelessWidget {
 
 //TODO - remove old code
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -46,36 +45,17 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class AppPage extends StatefulWidget {
+class AppPage extends StatelessWidget{
   final UserRepository userRepository;
+  AuthBloc _authenticationBloc;
+  DataBloc _dataBloc;
 
   AppPage({Key key, @required this.userRepository}) : super(key: key);
 
   @override
-  State<AppPage> createState() => AppPageState();
-}
-
-class AppPageState extends State<AppPage> {
-  AuthBloc _authenticationBloc;
-  DataBloc _dataBloc;
-
-  @override
-  void initState() {
-    _authenticationBloc = AuthBloc(widget.userRepository);
-    _dataBloc = DataBloc(FirestoreRepository(Firestore.instance));
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _authenticationBloc.dispose();
-    _dataBloc.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BlocMProvider(
+    _authenticationBloc = AuthBloc(userRepository);
+    return BlocProvider(
         child: MaterialApp(
             home: StreamBuilder(
                 stream: _authenticationBloc.authStream,
@@ -93,7 +73,14 @@ class AppPageState extends State<AppPage> {
                     return SplashPage();
                   }
                 })),
-        data: _dataBloc,
+        data: DataBloc(FirestoreRepository(Firestore.instance)),
         auth: _authenticationBloc);
+  }
+
+  @override
+  void dispose() {
+
+    _authenticationBloc.dispose();
+    _dataBloc.dispose();
   }
 }
