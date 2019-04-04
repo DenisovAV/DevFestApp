@@ -4,6 +4,9 @@ import 'package:devfest_flutter_app/src/utils/icons.dart';
 import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/material.dart';
 
+//TODO данные из bloc
+//TODO нажатия на соцсети
+
 class TeamsWidget extends StatelessWidget {
   final List<Team> teams;
   TeamsWidget(this.teams);

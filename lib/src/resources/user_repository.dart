@@ -33,10 +33,11 @@ class FirebaseUserRepository implements UserRepository {
     final GoogleSignInAccount googleUser = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth = await googleUser
         ?.authentication;
-    return _convertFutureResult(auth.signInWithGoogle(
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
-    ));
+    );
+    return _convertFutureResult(auth.signInWithCredential(credential));
   }
 
   Future<User> _signInAnonymously() async {

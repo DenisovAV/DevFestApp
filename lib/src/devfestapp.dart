@@ -76,11 +76,4 @@ class AppPage extends StatelessWidget{
         data: DataBloc(FirestoreRepository(Firestore.instance)),
         auth: _authenticationBloc);
   }
-
-  @override
-  void dispose() {
-
-    _authenticationBloc.dispose();
-    _dataBloc.dispose();
-  }
 }

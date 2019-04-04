@@ -3,6 +3,9 @@ import 'package:devfest_flutter_app/src/utils/colors.dart';
 import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/material.dart';
 
+//TODO данные из bloc
+//TODO нажатия на партнеров
+
 class PartnersWidget extends StatelessWidget {
   final List<Partner> partners;
   PartnersWidget(this.partners);

@@ -5,23 +5,19 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cloud_firestore: ^0.8.2+3
-  firebase_auth: ^0.6.6
-  firebase_messaging: ^2.1.0
-  firebase_storage: ^1.0.4
-  firebase_analytics: ^1.1.0
+  cloud_firestore: ^0.9.8
+  firebase_auth: ^0.8.3
   intl: ^0.15.7
   cupertino_icons: ^0.1.2
-  flutter_svg: ^0.10.1
-  url_launcher: ^4.0.3
-  flutter_youtube: ^1.1.4
-  google_sign_in: ^3.2.4
-  cloud_functions: ^0.0.5
-  equatable: ^0.1.6
-  google_maps_flutter: ^0.2.0
+  flutter_svg: ^0.12.1
+  url_launcher: ^5.0.2
+  flutter_youtube: ^1.1.6
+  google_sign_in: ^4.0.1+1
+  equatable: ^0.2.3
+  google_maps_flutter: ^0.5.0
 
 dev_dependencies:
-  test: ^1.5.1
+  test: ^1.6.1
   mockito: ^4.0.0
   flutter_test:
     sdk: flutter

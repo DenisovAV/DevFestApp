@@ -2,6 +2,7 @@ import 'package:devfest_flutter_app/src/bloc/data/data_bloc.dart';
 import 'package:devfest_flutter_app/src/bloc/events/event.dart';
 import 'package:devfest_flutter_app/src/providers/bloc_provider.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/home/home_widget.dart';
+import 'package:devfest_flutter_app/src/ui/widgets/home/tickets_widget.dart';
 import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/widgets.dart';
 
@@ -18,7 +19,8 @@ class HomePage extends StatelessWidget {
             bloc.checkRepo(TicketsLoadedEvent());
             return LoadingWidget();
           } else {
-            return HomePageViewer();
+            return TicketsWidget();
+            //return HomePageViewer();
           }
         }
     );

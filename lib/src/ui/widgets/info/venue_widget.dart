@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+//TODO не работают карты, починить
+//TODO описание площадки
+
 class MapsDemo extends StatefulWidget {
   @override
   State createState() => MapsDemoState();

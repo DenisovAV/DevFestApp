@@ -6,6 +6,9 @@ import 'package:devfest_flutter_app/src/ui/widgets/speakers/speakers_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+//TODO звездочка только если авторизован
+//TODO сделать favorite
+
 class SpeakersGridViewer extends StatelessWidget {
 
   SpeakersGridViewer({Key key})

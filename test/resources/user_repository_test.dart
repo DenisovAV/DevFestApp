@@ -46,7 +46,7 @@ main() {
 
       when(googleSignIn.signIn()).thenAnswer((_)=> Future.value(googleUser));
       when(googleUser.authentication).thenAnswer((_)=> Future.value(googleAuth));
-      when(auth.signInWithGoogle(idToken: googleAuth.idToken, accessToken: googleAuth.accessToken))
+      when(auth.signInWithCredential(GoogleAuthProvider.getCredential(idToken: googleAuth.idToken, accessToken: googleAuth.accessToken)))
           .thenAnswer((_) => Future.value(user));
 
       expect(await repository.login(AuthType.google), TypeMatcher<User>());
