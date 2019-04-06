@@ -12,6 +12,7 @@ dependencies:
   flutter_svg: ^0.12.1
   url_launcher: ^5.0.2
   flutter_youtube: ^1.1.6
+  youtube_player: ^0.6.0
   google_sign_in: ^4.0.1+1
   equatable: ^0.2.3
   google_maps_flutter: ^0.5.0
@@ -36,7 +37,6 @@ flutter:
   assets:
    - assets/images/fon1.png
    - assets/images/fon2.png
-   - assets/images/speaker.jpg
    - assets/images/home.jpg
    - assets/images/team.jpg
    - assets/images/logo.svg

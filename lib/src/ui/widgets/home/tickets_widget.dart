@@ -1,11 +1,13 @@
 import 'package:devfest_flutter_app/src/bloc/events/event.dart';
+import 'package:devfest_flutter_app/src/consts/strings.dart';
 import 'package:devfest_flutter_app/src/models/ticket.dart';
 import 'package:devfest_flutter_app/src/providers/bloc_provider.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/common/expanded_widget.dart';
 import 'package:devfest_flutter_app/src/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_youtube/flutter_youtube.dart';
 
-//TODO Сделать картинки из конфига (yml или по другому)
+//TODO: Сделать картинки из конфига (yml или по другому)
 //TODO ExpandedWidget переделать для всех
 //TODO Нажатия кнопок
 
@@ -13,14 +15,13 @@ class TicketsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpandedWidget(
-      height: 250.0,
       image: AssetImage("assets/images/home.jpg"),
       child: Padding(
-          padding: EdgeInsets.only(top: 70.0),
+          padding: EdgeInsets.only(top: 30.0),
           child: Column(children: <Widget>[
             Center(child: _HeaderPlateWidget()),
-            Container(height: 60.0),
-           // _TicketsPanel()
+            Container(height: 30.0),
+            _TicketsPanel()
           ])),
     );
   }
@@ -31,7 +32,13 @@ class _TicketsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Ticket> tickets = BlocProvider.of(context).data.tickets;
     return Container(
-        height: 150.0,
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(16.0),
+          border: Border.all(width: 1.0, color: Colors.white),
+        ),
+        height: 250.0,
+        width: 290.0,
         child: CustomScrollView(
           scrollDirection: Axis.vertical,
           shrinkWrap: false,
@@ -74,6 +81,12 @@ class _HeaderPlateWidget extends StatelessWidget {
         borderSide: BorderSide(color: Colors.white),
         child: Text('VIEW HIGHLIGHTS', style: TextStyle(color: Colors.white)),
         onPressed: () =>
+            /* FlutterYoutube.playYoutubeVideoById(
+                apiKey: YOUTUBE_API,
+                videoId: YOUTUBE_KEY,
+                autoPlay: true, //default falase
+                fullScreen: false //default false
+            )*/
             BlocProvider.of(context).data.events.add(HighlightsTappedEvent()),
       )
     ]);
@@ -108,14 +121,14 @@ class _TicketCard extends StatelessWidget {
               child: Center(
                   child: OutlineButton(
                 borderSide: BorderSide(color: Colors.white),
-                child: Text(this.ticket.getButtolLabel,
+                child: Text(ticket.getButtolLabel,
                     style: TextStyle(
                         color: ticket.isValid ? Colors.white : Colors.grey,
                         fontSize: 12.0)),
                 onPressed: () => BlocProvider.of(context)
                     .data
                     .events
-                    .add(HighlightsTappedEvent()),
+                    .add(TicketTappedEvent(ticket)),
               )))
         ]));
   }

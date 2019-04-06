@@ -13,10 +13,10 @@ class PartnerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final DataBloc bloc = BlocProvider.of(context).data;
     return StreamBuilder<BlocEvent>(
-        stream: bloc.teamsStream,
+        stream: bloc.partnersStream,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            bloc.checkRepo(TeamLoadedEvent());
+            bloc.checkRepo(PartnersLoadedEvent());
             return LoadingWidget();
           } else {
             return PartnersWidget(bloc.partners);

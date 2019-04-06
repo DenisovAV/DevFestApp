@@ -1,4 +1,5 @@
 
+import 'package:devfest_flutter_app/src/models/partner.dart';
 import 'package:devfest_flutter_app/src/models/speaker.dart';
 import 'package:devfest_flutter_app/src/models/ticket.dart';
 import 'package:equatable/equatable.dart';
@@ -46,6 +47,17 @@ class TicketTappedEvent extends BlocEvent {
 
   @override
   String toString() => 'TicketTappedEvent {ticket: $ticket}';
+
+}
+
+class PartnerLogoTappedEvent extends BlocEvent {
+
+  final Logo logo;
+
+  PartnerLogoTappedEvent(this.logo);
+
+  @override
+  String toString() => 'ParnterLogoTappedEvent {logo: $logo}';
 
 }
 

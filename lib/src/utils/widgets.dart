@@ -39,4 +39,5 @@ class LogoImage extends StatelessWidget {
     return url.contains('.svg') ? SvgPicture.network(url) : Image(
         image: NetworkImage(url));
   }
+
 }

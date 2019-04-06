@@ -57,18 +57,7 @@ class _TeamMembersList extends StatelessWidget {
           vertical: 12.0,
           horizontal: 24.0,
         ),
-        decoration: BoxDecoration(
-          color: Colors.black45,
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(16.0),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 10.0,
-              offset: Offset(0.0, 10.0),
-            ),
-          ],
-        ),
+        decoration: Utils.viewDecoration(),
         child: Column(children: <Widget>[
           _TeamTitleText(team.title),
           Column(
