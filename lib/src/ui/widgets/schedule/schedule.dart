@@ -155,7 +155,7 @@ class SpeakerChipWidget extends GenericScheduleWidget {
       final List<Speaker> speakers = bloc.speakers
           .where((speaker) => sessions[0].speakers.contains(speaker.id))
           .toList();
-      if (speakers.length > 0) {
+      if (speakers.isNotEmpty) {
         return Column(
             children: speakers
                 .map((speaker) => Chip(
@@ -192,7 +192,6 @@ class TitleWidget extends GenericScheduleWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           )),
     );
-    ;
   }
 }
 

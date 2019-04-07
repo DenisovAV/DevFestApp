@@ -20,44 +20,6 @@ class SessionView extends StatelessWidget {
   }
 }
 
-class BookmarkWidget extends StatefulWidget {
-  final Session session;
-  final Timeslot timeslot;
-  bool isBookmark;
-
-  BookmarkWidget(this.timeslot, this.session, this.isBookmark);
-
-  @override
-  _BookmarkWidgetState createState() => _BookmarkWidgetState();
-}
-
-class _BookmarkWidgetState extends State<BookmarkWidget> {
-  @override
-  Widget build(BuildContext context) {
-    if (widget.isBookmark) {
-      return FloatingActionButton(
-        onPressed: () {
-          //_bookmark(timeslot, session, false);
-          setState(() {
-            widget.isBookmark = false;
-          });
-        },
-        child: Icon(Icons.favorite),
-      );
-    } else {
-      return FloatingActionButton(
-        onPressed: () {
-          //_bookmark(timeslot, session, true);
-          setState(() {
-            widget.isBookmark = true;
-          });
-        },
-        child: Icon(Icons.favorite_border),
-      );
-    }
-  }
-}
-
 class SessionWidget extends StatelessWidget {
   final Session session;
   final Timeslot timeslot;
@@ -135,7 +97,7 @@ class SpeakerChipWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (speakers.length > 0) {
+    if (speakers.isNotEmpty) {
       return Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
           Widget>[
         Text(
@@ -229,7 +191,7 @@ class CommunityChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ((speaker.badges != null && !speaker.badges.isEmpty)
+    return ((speaker.badges != null && speaker.badges.isNotEmpty)
         ? Row(
             children: speaker.badges
                 ?.map((badge) =>

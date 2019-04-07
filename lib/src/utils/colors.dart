@@ -27,17 +27,4 @@ class Utils {
       fontFamily: 'GoogleSans',
       color: color, fontSize: 22.0, fontWeight: FontWeight.w600);
 
-  static BoxDecoration viewDecoration() => BoxDecoration(
-    color: Colors.black45,
-    shape: BoxShape.rectangle,
-    borderRadius: BorderRadius.circular(16.0),
-    boxShadow: <BoxShadow>[
-      BoxShadow(
-        color: Colors.black12,
-        blurRadius: 10.0,
-        offset: Offset(0.0, 10.0),
-      ),
-    ],
-  );
-
 }

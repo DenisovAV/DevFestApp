@@ -37,24 +37,18 @@ class MyApp extends StatelessWidget {
             userRepository:
                 FirebaseUserRepository(FirebaseAuth.instance, GoogleSignIn())),
         //navigatorObservers: <NavigatorObserver>[observer],
-        routes: <String, WidgetBuilder>{
-          '/HomePage': (BuildContext context) => MainPage(),
-          '/LoginPage': (BuildContext context) => SignInPage(),
-          '/AppPage': (BuildContext context) => AppPage(),
-        });
+        );
   }
 }
 
 class AppPage extends StatelessWidget{
   final UserRepository userRepository;
-  AuthBloc _authenticationBloc;
-  DataBloc _dataBloc;
 
   AppPage({Key key, @required this.userRepository}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    _authenticationBloc = AuthBloc(userRepository);
+    final AuthBloc _authenticationBloc = AuthBloc(userRepository);
     return BlocProvider(
         child: MaterialApp(
             home: StreamBuilder(

@@ -1,28 +1,25 @@
 import 'package:devfest_flutter_app/src/bloc/events/event.dart';
-import 'package:devfest_flutter_app/src/consts/strings.dart';
 import 'package:devfest_flutter_app/src/models/ticket.dart';
 import 'package:devfest_flutter_app/src/providers/bloc_provider.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/common/expanded_widget.dart';
 import 'package:devfest_flutter_app/src/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_youtube/flutter_youtube.dart';
 
-//TODO: Сделать картинки из конфига (yml или по другому)
-//TODO ExpandedWidget переделать для всех
-//TODO Нажатия кнопок
+//TODO: Сделать картинки и надписи из конфига (yml или по другому)
 
 class TicketsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpandedWidget(
       image: AssetImage("assets/images/home.jpg"),
-      child: Padding(
-          padding: EdgeInsets.only(top: 30.0),
-          child: Column(children: <Widget>[
-            Center(child: _HeaderPlateWidget()),
-            Container(height: 30.0),
-            _TicketsPanel()
-          ])),
+      child: TransparentWidget(
+          child: Padding(
+              padding: EdgeInsets.only(top: 30.0),
+              child: Column(children: <Widget>[
+                Center(child: _HeaderPlateWidget()),
+                Container(height: 30.0),
+                _TicketsPanel()
+              ]))),
     );
   }
 }

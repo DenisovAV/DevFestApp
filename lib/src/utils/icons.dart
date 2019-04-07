@@ -85,7 +85,7 @@ class IconHelper {
 }
 
 class CoverImageWidget extends StatelessWidget {
-  String imageUrl;
+  final String imageUrl;
 
   CoverImageWidget(this.imageUrl);
 

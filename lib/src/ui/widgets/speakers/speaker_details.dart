@@ -10,8 +10,6 @@ class _SocialViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
-
     return MergeSemantics(
       child: Padding(
           padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -24,7 +22,7 @@ class _SocialViewer extends StatelessWidget {
 class SpeakerDetailsViewer extends StatelessWidget {
   SpeakerDetailsViewer(this.speaker);
 
-  static const double height = 116.0;
+  static const double HEIGHT = 116.0;
   static const String SOCIAL_NETWORKS='Social networks';
   final Speaker speaker;
 

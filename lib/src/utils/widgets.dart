@@ -11,8 +11,7 @@ class LoadingWidget extends StatelessWidget {
 
 class CircleImage extends StatelessWidget {
 
-  ImageProvider image;
-
+  final ImageProvider image;
   CircleImage(this.image);
 
   Widget build(BuildContext context) {
@@ -31,8 +30,7 @@ class CircleImage extends StatelessWidget {
 
 class LogoImage extends StatelessWidget {
 
-  String url;
-
+  final String url;
   LogoImage(this.url);
 
   Widget build(BuildContext context) {

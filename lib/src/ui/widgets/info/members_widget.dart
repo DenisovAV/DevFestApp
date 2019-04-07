@@ -1,4 +1,5 @@
 import 'package:devfest_flutter_app/src/models/team.dart';
+import 'package:devfest_flutter_app/src/ui/widgets/common/expanded_widget.dart';
 import 'package:devfest_flutter_app/src/utils/colors.dart';
 import 'package:devfest_flutter_app/src/utils/icons.dart';
 import 'package:devfest_flutter_app/src/utils/widgets.dart';
@@ -13,16 +14,8 @@ class TeamsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(children: <Widget>[
-      Expanded(
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/fon1.png"),
-              fit: BoxFit.cover,
-            ),
-          ),
+    return ExpandedWidget(
+          image: AssetImage("assets/images/fon1.png"),
           child: CustomScrollView(
             scrollDirection: Axis.vertical,
             shrinkWrap: false,
@@ -38,9 +31,7 @@ class TeamsWidget extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      )
-    ]));
+        );
   }
 }
 
@@ -51,13 +42,8 @@ class _TeamMembersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return TransparentWidget(
         height: 180.0 * ((team.members.length + 1) / 2).truncate() + 35.0,
-        margin: EdgeInsets.symmetric(
-          vertical: 12.0,
-          horizontal: 24.0,
-        ),
-        decoration: Utils.viewDecoration(),
         child: Column(children: <Widget>[
           _TeamTitleText(team.title),
           Column(
