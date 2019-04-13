@@ -17,27 +17,16 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.dark(),
-      home: MyApp(),
+      title: 'DevFest Gorky 2018',
+      theme: new ThemeData(
+          brightness: Brightness.light,
+          primarySwatch: Colors.blue,
+          fontFamily: "GoogleSans"),
+      home: AppPage(
+          userRepository:
+          FirebaseUserRepository(FirebaseAuth.instance, GoogleSignIn())),
+      //navigatorObservers: <NavigatorObserver>[observer],
     );
-  }
-}
-
-//TODO - remove old code
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-        title: 'DevFest Gorky 2018',
-        theme: new ThemeData(
-            brightness: Brightness.light,
-            primarySwatch: Colors.blue,
-            fontFamily: "GoogleSans"),
-        home: AppPage(
-            userRepository:
-                FirebaseUserRepository(FirebaseAuth.instance, GoogleSignIn())),
-        //navigatorObservers: <NavigatorObserver>[observer],
-        );
   }
 }
 
