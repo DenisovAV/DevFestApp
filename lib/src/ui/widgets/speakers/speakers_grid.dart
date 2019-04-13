@@ -3,6 +3,7 @@ import 'package:devfest_flutter_app/src/bloc/data/data_bloc.dart';
 import 'package:devfest_flutter_app/src/models/speaker.dart';
 import 'package:devfest_flutter_app/src/providers/bloc_provider.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/speakers/speakers_widget.dart';
+import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -73,11 +74,8 @@ class SpeakerGridItem extends StatelessWidget {
         child: Hero(
             key: Key(speaker.photoUrl),
             tag: speaker.tag,
-            child: Image.network(
-              speaker.photoUrl,
-              fit: BoxFit.cover,
-            )));
 
+            child: CachedImage(speaker.photoUrl)));
     final IconData icon = Icons.star_border;
 
     return GridTile(

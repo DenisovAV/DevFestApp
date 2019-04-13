@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:devfest_flutter_app/src/models/team.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/common/expanded_widget.dart';
 import 'package:devfest_flutter_app/src/utils/colors.dart';
@@ -97,7 +98,7 @@ class _MemberAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         alignment: FractionalOffset.topCenter,
-        child: CircleImage(NetworkImage(photoUrl)));
+        child: CircleImage(CachedNetworkImageProvider(photoUrl)));
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:devfest_flutter_app/src/models/speaker.dart';
 import 'package:devfest_flutter_app/src/utils/icons.dart';
+import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/material.dart';
 
 class _SocialViewer extends StatelessWidget {
@@ -37,10 +38,7 @@ class SpeakerDetailsViewer extends StatelessWidget {
           SizedBox(
             width: 48.0,
             height: 24.0,
-            child: Image.network(
-              speaker.companyLogoUrl,
-              fit: BoxFit.contain,
-            ),
+            child: CachedImage(speaker.companyLogoUrl)
           ),
           Padding(
               padding: EdgeInsets.only(top: 16.0),
@@ -102,7 +100,7 @@ class SpeakerDetails extends StatelessWidget {
                 background: Stack(
                   fit: StackFit.expand,
                   children: <Widget>[
-                    CoverImageWidget(speaker.photoUrl),
+                    CachedImage(speaker.photoUrl, fit: BoxFit.fitWidth),
                     // This gradient ensures that the toolbar icons are distinct
                     // against the background image.
                   ],

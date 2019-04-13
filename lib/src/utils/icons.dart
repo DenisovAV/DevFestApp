@@ -83,24 +83,3 @@ class IconHelper {
   static Widget gdg = SvgPicture.asset('assets/icons/gdg.svg');
   static Widget wtm = SvgPicture.asset('assets/icons/wtm.svg');
 }
-
-class CoverImageWidget extends StatelessWidget {
-  final String imageUrl;
-
-  CoverImageWidget(this.imageUrl);
-
-  @override
-  Widget build(BuildContext context) {
-    if (imageUrl != null) {
-      return FadeInImage.assetNetwork(
-          fit: BoxFit.fitWidth,
-          placeholder: 'assets/images/logo_blue.png',
-          image: imageUrl);
-    } else {
-      return Image(
-        fit: BoxFit.fitWidth,
-        image: AssetImage('assets/images/logo_blue.png'),
-      );
-    }
-  }
-}

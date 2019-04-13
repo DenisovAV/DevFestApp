@@ -96,7 +96,7 @@ class _LogoSign extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         alignment: FractionalOffset.topCenter,
-        child: SizedBox(width: 140.0, height: 60.0, child: LogoImage(logoUrl)));
+        child: SizedBox(width: 140.0, height: 60.0, child: CachedImage(logoUrl)));
   }
 }
 

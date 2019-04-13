@@ -69,6 +69,7 @@ class DataBloc {
 
 
   checkRepo(BlocEvent event) {
+    print(speakers.length);
     if (isRepoLoaded(event)) {
       _repositoryController.sink.add(event);
     }

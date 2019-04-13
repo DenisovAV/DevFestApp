@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:devfest_flutter_app/src/bloc/data/data_bloc.dart';
 import 'package:devfest_flutter_app/src/models/schedule.dart';
 import 'package:devfest_flutter_app/src/providers/bloc_provider.dart';
@@ -164,7 +165,7 @@ class SpeakerChipWidget extends GenericScheduleWidget {
                       avatar: Hero(
                           tag: "anim_speaker_avatar_${speaker.name}",
                           child: CircleAvatar(
-                              backgroundImage: NetworkImage(speaker.photoUrl))),
+                              backgroundImage: CachedNetworkImageProvider(speaker.photoUrl))),
                     ))
                 .toList());
       } else {

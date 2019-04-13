@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:devfest_flutter_app/src/models/schedule.dart';
 import 'package:devfest_flutter_app/src/models/session.dart';
 import 'package:devfest_flutter_app/src/models/speaker.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/speakers/speakers_widget.dart';
 import 'package:devfest_flutter_app/src/utils/icons.dart';
+import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/material.dart';
 
 class SessionView extends StatelessWidget {
@@ -34,7 +36,7 @@ class SessionWidget extends StatelessWidget {
         Stack(
           alignment: Alignment.topLeft,
           children: <Widget>[
-            CoverImageWidget(session.image),
+            CachedImage(session.image, fit: BoxFit.fitWidth),
             SafeArea(
                 child: IconButton(
               icon: Icon(
@@ -120,7 +122,7 @@ class SpeakerChipWidget extends StatelessWidget {
                             Hero(
                               tag: "anim_speaker_avatar_${speaker.name}",
                               child: CircleAvatar(
-                                backgroundImage: NetworkImage(speaker.photoUrl),
+                                backgroundImage: CachedNetworkImageProvider(speaker.photoUrl),
                                 minRadius: 35.0,
                               ),
                             ),
