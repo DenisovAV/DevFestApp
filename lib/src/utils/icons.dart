@@ -80,6 +80,6 @@ class IconHelper {
   static Widget instagram = SvgPicture.asset('assets/icons/instagram.svg');
   static Widget linkedin = SvgPicture.asset('assets/icons/linkedin.svg');
   static Widget gde = SvgPicture.asset('assets/icons/gde.svg');
-  static Widget gdg = SvgPicture.asset('assets/icons/gdg.svg');
+  static Widget gdg({Color color}) => SvgPicture.asset('assets/icons/gdg.svg', color: color ?? Colors.black);
   static Widget wtm = SvgPicture.asset('assets/icons/wtm.svg');
 }
