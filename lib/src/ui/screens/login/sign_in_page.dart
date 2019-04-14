@@ -91,13 +91,15 @@ class _AnimatedLogoState extends State<AnimatedLogo> {
 
   final _duration = Duration(seconds: 2, milliseconds: 500);
   double _horizontalPadding = 60;
+  bool _runAnimation = true;
 
   // make logo bigger
   void _increase() async {
     setState(() {});
     _horizontalPadding = 0;
     await Future.delayed(_duration);
-    _reduce();
+    if (_runAnimation)
+      _reduce();
   }
 
   // make logo lower
@@ -105,7 +107,8 @@ class _AnimatedLogoState extends State<AnimatedLogo> {
     setState(() {});
     _horizontalPadding = 60;
     await Future.delayed(_duration);
-    _increase();
+    if (_runAnimation)
+      _increase();
   }
 
   @override
@@ -122,5 +125,11 @@ class _AnimatedLogoState extends State<AnimatedLogo> {
       child: Image.asset('assets/images/logo_grey.png',),
       height: 100,
     );
+  }
+
+  @override
+  void dispose() {
+    _runAnimation = false;
+    super.dispose();
   }
 }
