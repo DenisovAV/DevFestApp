@@ -1,74 +1,10 @@
-import 'dart:async';
-
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+typedef void IconCallback(Equatable event);
 
 class IconHelper {
-  double badgeWidth = 24.0;
-  double badgeHeight = 24.0;
-
-  Widget getBadgeIcon(String name, String url) => Padding(
-      padding: EdgeInsets.only(right: 4.0),
-      child: FloatingActionButton(
-          backgroundColor: getCommunityColor(name),
-          child: SizedBox(
-              width: badgeWidth,
-              height: badgeHeight,
-              child: SvgPicture.asset('assets/icons/${name}.svg',
-                  color: Colors.white)),
-          heroTag: url,
-          shape:
-              CircleBorder(side: BorderSide(color: Colors.white, width: 3.0)),
-          mini: true,
-          onPressed: () {
-            _launchURL(url);
-          }));
-
-  Widget getSocialIcon(String name, String url, double size, {Color color, EdgeInsetsGeometry padding}) =>
-      SizedBox(
-        child: IconButton(
-            iconSize: size,
-            padding: padding!=null ? padding: EdgeInsets.zero,
-            icon: SvgPicture.asset('assets/icons/${name}.svg', color: color),
-            onPressed: () {
-              _launchURL(url);
-            }),
-        width: size,
-        height: size,
-      );
-
-  Widget getTitleLogo(double width, double height) => SizedBox(
-      width: width,
-      height: height,
-      child: SvgPicture.asset('assets/images/logo-monochrome.svg',
-          color: Colors.white));
-
-  Future _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url, forceWebView: true);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-  static String getSessionImageAsset(String tag) {
-    if (tag == 'Machine Learning') return 'assets/tags/machine_learning.jpg';
-    if (tag == 'Kotlin') return 'assets/tags/kotlin.png';
-    if (tag == 'Android') return 'assets/tags/android.jpg';
-    return 'assets/images/logo.png';
-  }
-
-  Color getCommunityColor(String type) {
-    if (type == "gdg") {
-      return Colors.blue;
-    } else if (type == "gde") {
-      return Colors.indigo;
-    } else {
-      return Colors.greenAccent;
-    }
-  }
-
   static Widget telegram = SvgPicture.asset('assets/icons/telegram.svg');
   static Widget twitter = SvgPicture.asset('assets/icons/twitter.svg');
   static Widget youtube = SvgPicture.asset('assets/icons/youtube.svg');

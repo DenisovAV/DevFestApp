@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:devfest_flutter_app/src/models/schedule.dart';
 import 'package:devfest_flutter_app/src/models/session.dart';
 import 'package:devfest_flutter_app/src/models/speaker.dart';
+import 'package:devfest_flutter_app/src/ui/widgets/common/icon_widgets.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/speakers/speakers_widget.dart';
-import 'package:devfest_flutter_app/src/utils/icons.dart';
 import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +17,8 @@ class SessionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(child: SessionWidget(timeslot, session, speakers)),
+      body: SingleChildScrollView(
+          child: SessionWidget(timeslot, session, speakers)),
     );
   }
 }
@@ -122,7 +123,8 @@ class SpeakerChipWidget extends StatelessWidget {
                             Hero(
                               tag: "anim_speaker_avatar_${speaker.name}",
                               child: CircleAvatar(
-                                backgroundImage: CachedNetworkImageProvider(speaker.photoUrl),
+                                backgroundImage: CachedNetworkImageProvider(
+                                    speaker.photoUrl),
                                 minRadius: 35.0,
                               ),
                             ),
@@ -163,10 +165,8 @@ class SpeakerChipWidget extends StatelessWidget {
   }
 
   _openSpeakerPage(BuildContext context, Speaker speaker) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => SpeakerViewer(speaker)));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => SpeakerViewer(speaker)));
   }
 }
 
@@ -195,10 +195,8 @@ class CommunityChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return ((speaker.badges != null && speaker.badges.isNotEmpty)
         ? Row(
-            children: speaker.badges
-                ?.map((badge) =>
-                    IconHelper().getBadgeIcon(badge.name, badge.link))
-                ?.toList())
+            children:
+                speaker.badges?.map((badge) => BadgeIcon(badge))?.toList())
         : Container());
   }
 }

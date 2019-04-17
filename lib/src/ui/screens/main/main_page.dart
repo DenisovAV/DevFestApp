@@ -8,9 +8,9 @@ import 'package:devfest_flutter_app/src/ui/screens/schedule/schedule_page.dart';
 import 'package:devfest_flutter_app/src/models/user.dart';
 import 'package:devfest_flutter_app/src/ui/screens/speakers/speakers_page.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/info/info_widget.dart';
-import 'package:devfest_flutter_app/src/utils/icons.dart';
 import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class NavigationItem {
   NavigationItem({
@@ -80,7 +80,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           } else {
             return Scaffold(
               appBar: AppBar(
-                title: IconHelper().getTitleLogo(120.0, 48.0),
+                title: SizedBox(
+                    width: 120.0,
+                    height: 48.0,
+                    child: SvgPicture.asset('assets/images/logo-monochrome.svg',
+                        color: Colors.white)),
                 actions: <Widget>[
                   PopupMenuButton<String>(
                     onSelected: (String value)  => auth.events.add(LogoutEvent()),
