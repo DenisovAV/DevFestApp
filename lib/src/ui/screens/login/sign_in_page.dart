@@ -14,7 +14,8 @@ class _SignInPageState extends State<SignInPage> {
   AuthBloc _auth;
   final _startAnimationDuration = Duration(milliseconds: 750);
   final _curve = Curves.elasticInOut;
-  double _logoHPadding = 200;
+  double _devFestLogoHPadding = 250;
+  double _gdgLogoHPadding = 200;
   double _loginHPadding = 200;
   double _skipHPadding = 200;
 
@@ -28,7 +29,8 @@ class _SignInPageState extends State<SignInPage> {
   void _startAnimation() async {
     await Future.delayed(Duration(milliseconds: 50));
     setState(() {
-      _logoHPadding = 30;
+      _devFestLogoHPadding = 90;
+      _gdgLogoHPadding = 30;
       _loginHPadding = 40;
       _skipHPadding = 60;
     });
@@ -36,11 +38,21 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-    final logo = AnimatedContainer(
-      curve: _curve,
+
+    final devFestLogo = AnimatedContainer(
       duration: _startAnimationDuration,
-      padding: EdgeInsets.symmetric(horizontal: _logoHPadding),
-      child: AnimatedLogo(),
+      curve: _curve,
+      padding: EdgeInsets.symmetric(horizontal: _devFestLogoHPadding),
+      margin: EdgeInsets.only(top: 60),
+      child: Image.asset("assets/images/logo_grey.png"),
+    );
+
+    final gdgLogo = AnimatedContainer(
+      curve: _curve,
+      height: 200,
+      duration: _startAnimationDuration,
+      padding: EdgeInsets.symmetric(horizontal: _gdgLogoHPadding),
+      child: SplashAnimation()
     );
 
     final loginButton = AnimatedContainer(
@@ -72,64 +84,73 @@ class _SignInPageState extends State<SignInPage> {
             shrinkWrap: true,
             padding: EdgeInsets.only(left: 24.0, right: 24.0),
             children: <Widget>[
-              logo,
-              SizedBox(height: 150.0),
+              devFestLogo,
+              gdgLogo,
+              SizedBox(height: 100.0),
               loginButton,
-              skipButton
+              skipButton,
             ]),
       ),
     );
   }
 }
 
-class AnimatedLogo extends StatefulWidget {
+class SplashAnimation extends StatefulWidget {
   @override
-  _AnimatedLogoState createState() => _AnimatedLogoState();
+  _SplashAnimationState createState() => _SplashAnimationState();
 }
 
-class _AnimatedLogoState extends State<AnimatedLogo> {
-
-  final _duration = Duration(seconds: 2, milliseconds: 500);
-  double _horizontalPadding = 60;
-  bool _runAnimation = true;
-
-  // make logo bigger
-  void _increase() async {
-    setState(() {});
-    _horizontalPadding = 0;
-    await Future.delayed(_duration);
-    if (_runAnimation)
-      _reduce();
-  }
-
-  // make logo lower
-  void _reduce() async {
-    setState(() {});
-    _horizontalPadding = 60;
-    await Future.delayed(_duration);
-    if (_runAnimation)
-      _increase();
-  }
+class _SplashAnimationState extends State<SplashAnimation>
+    with SingleTickerProviderStateMixin {
+  AnimationController _logoController;
+  Animation<double> _logoAnimation;
 
   @override
   void initState() {
-    _increase();
+    _logoController = AnimationController(
+      duration: Duration(seconds: 2),
+      vsync: this,
+    );
+    _logoAnimation = CurvedAnimation(
+      curve: Curves.linear,
+      parent: _logoController,
+    );
+    _logoAnimation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) _logoController.reverse();
+      if (status == AnimationStatus.dismissed) {
+        _logoController.forward();
+      }
+    });
+    Future.delayed(Duration(seconds: 2)).then((_) => _logoController.forward());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: _duration,
-      padding: EdgeInsets.symmetric(horizontal: _horizontalPadding),
-      child: Image.asset('assets/images/logo_grey.png',),
-      height: 100,
+    return AnimatedLogo(
+      animation: _logoAnimation,
+      child: Image.asset("assets/images/organizer-logo.png"),
     );
   }
 
   @override
   void dispose() {
-    _runAnimation = false;
+    _logoController.stop();
     super.dispose();
+  }
+}
+
+class AnimatedLogo extends AnimatedWidget {
+  final _size = Tween(begin: 0.0, end: 60.0);
+  AnimatedLogo({Animation<double> animation, this.child})
+      : super(listenable: animation);
+  final Widget child;
+  @override
+  Widget build(BuildContext context) {
+    Animation<double> animation = listenable;
+    return Container(
+      padding: EdgeInsets.all(_size.evaluate(animation)),
+      child: child,
+    );
   }
 }
