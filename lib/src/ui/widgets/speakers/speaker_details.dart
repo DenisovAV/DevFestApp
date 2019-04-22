@@ -1,5 +1,5 @@
 import 'package:devfest_flutter_app/src/models/speaker.dart';
-import 'package:devfest_flutter_app/src/utils/icons.dart';
+import 'package:devfest_flutter_app/src/ui/widgets/common/icon_widgets.dart';
 import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +24,7 @@ class SpeakerDetailsViewer extends StatelessWidget {
   SpeakerDetailsViewer(this.speaker);
 
   static const double HEIGHT = 116.0;
-  static const String SOCIAL_NETWORKS='Social networks';
+  static const String SOCIAL_NETWORKS = 'Social networks';
   final Speaker speaker;
 
   @override
@@ -36,10 +36,9 @@ class SpeakerDetailsViewer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           SizedBox(
-            width: 48.0,
-            height: 24.0,
-            child: CachedImage(speaker.companyLogoUrl)
-          ),
+              width: 48.0,
+              height: 24.0,
+              child: CachedImage(speaker.companyLogoUrl)),
           Padding(
               padding: EdgeInsets.only(top: 16.0),
               child: Center(
@@ -55,8 +54,9 @@ class SpeakerDetailsViewer extends StatelessWidget {
                   child: Text(speaker.bio, style: TextStyle(fontSize: 16.0)))),
           _SocialViewer(
             speaker.socials
-                ?.map((social) =>
-                    IconHelper().getSocialIcon(social.icon, social.link, 32.0))
+                ?.map((social) => SocialIcon(
+                    social,
+                    size: 32.0))
                 ?.toList(),
             SOCIAL_NETWORKS,
           )
@@ -70,7 +70,7 @@ class SpeakerDetails extends StatelessWidget {
   SpeakerDetails(this.speaker);
 
   static final GlobalKey<ScaffoldState> _scaffoldKey =
-  GlobalKey<ScaffoldState>();
+      GlobalKey<ScaffoldState>();
   final Speaker speaker;
 
   final double _appBarHeight = 256.0;
@@ -81,9 +81,7 @@ class SpeakerDetails extends StatelessWidget {
       data: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Colors.indigo,
-        platform: Theme
-            .of(context)
-            .platform,
+        platform: Theme.of(context).platform,
       ),
       child: Scaffold(
         key: _scaffoldKey,
@@ -92,10 +90,8 @@ class SpeakerDetails extends StatelessWidget {
             SliverAppBar(
               expandedHeight: _appBarHeight,
               pinned: true,
-              actions: speaker.badges
-                  ?.map((badge) =>
-                  IconHelper().getBadgeIcon(badge.name, badge.link))
-                  ?.toList(),
+              actions:
+                  speaker.badges?.map((badge) => BadgeIcon(badge))?.toList(),
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
                   fit: StackFit.expand,
@@ -118,4 +114,3 @@ class SpeakerDetails extends StatelessWidget {
     );
   }
 }
-

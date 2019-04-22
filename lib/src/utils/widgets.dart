@@ -30,6 +30,9 @@ class CachedImage extends StatelessWidget {
   CachedImage(this.url, {this.fit});
 
   Widget build(BuildContext context) {
+    if(url == null) {
+      return Image.asset('assets/images/logo_blue.png');
+    }
     return url.contains('.svg')
         ? SvgPicture.network(url,
             fit: fit ?? BoxFit.contain,
@@ -39,6 +42,6 @@ class CachedImage extends StatelessWidget {
             fit: fit ?? BoxFit.contain,
             placeholder: (context, url) => LoadingWidget(),
             errorWidget: (context, url, error) => Icon(Icons.error),
-          );
+          ) ?? Container();
   }
 }

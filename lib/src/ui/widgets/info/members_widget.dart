@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:devfest_flutter_app/src/models/team.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/common/expanded_widget.dart';
+import 'package:devfest_flutter_app/src/ui/widgets/common/icon_widgets.dart';
 import 'package:devfest_flutter_app/src/utils/colors.dart';
-import 'package:devfest_flutter_app/src/utils/icons.dart';
 import 'package:devfest_flutter_app/src/utils/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -16,23 +16,23 @@ class TeamsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpandedWidget(
-          image: AssetImage("assets/images/fon1.png"),
-          child: CustomScrollView(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: false,
-            slivers: <Widget>[
-              SliverPadding(
-                padding: EdgeInsets.symmetric(vertical: 2.0),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) => _TeamMembersList(teams[index]),
-                    childCount: teams.length,
-                  ),
-                ),
+      image: AssetImage("assets/images/fon1.png"),
+      child: CustomScrollView(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: false,
+        slivers: <Widget>[
+          SliverPadding(
+            padding: EdgeInsets.symmetric(vertical: 2.0),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => _TeamMembersList(teams[index]),
+                childCount: teams.length,
               ),
-            ],
+            ),
           ),
-        );
+        ],
+      ),
+    );
   }
 }
 
@@ -136,8 +136,8 @@ class _MemberCardContent extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: member.socials
                           ?.map(
-                            (social) => IconHelper().getSocialIcon(
-                                social.icon, social.link, 26.0,
+                            (social) => SocialIcon(social,
+                                size: 26.0,
                                 color: Colors.white,
                                 padding: EdgeInsets.symmetric(horizontal: 4.0)),
                           )

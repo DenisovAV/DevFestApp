@@ -13,6 +13,7 @@ import 'package:flutter_youtube/flutter_youtube.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
+
 class DataBloc {
   final Repository _repository;
   List<Team> teams = List<Team>();
@@ -134,6 +135,9 @@ class DataBloc {
         break;
       case PartnerLogoTappedEvent:
         _launchURL((event as PartnerLogoTappedEvent).logo.linkUrl);
+        break;
+      case BadgeTappedEvent:
+        _launchURL((event as BadgeTappedEvent).badge.link);
         break;
     }
   }
