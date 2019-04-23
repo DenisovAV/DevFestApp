@@ -34,4 +34,21 @@ class Utils {
       fontSize: 22.0,
       fontWeight: FontWeight.w600);
 
+  static Color getCommunityColor(String type) {
+    if (type == "gdg") {
+      return Colors.blue;
+    } else if (type == "gde") {
+      return Colors.indigo;
+    } else {
+      return Colors.greenAccent;
+    }
+  }
+
+  static String getSessionImageAsset(String tag) {
+    if (tag == 'Machine Learning') return 'assets/tags/machine_learning.jpg';
+    if (tag == 'Kotlin') return 'assets/tags/kotlin.png';
+    if (tag == 'Android') return 'assets/tags/android.jpg';
+    return 'assets/images/logo.png';
+  }
+
 }

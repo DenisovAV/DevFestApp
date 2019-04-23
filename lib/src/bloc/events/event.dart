@@ -1,8 +1,10 @@
 
 import 'package:devfest_flutter_app/src/models/partner.dart';
+import 'package:devfest_flutter_app/src/models/social.dart';
 import 'package:devfest_flutter_app/src/models/speaker.dart';
 import 'package:devfest_flutter_app/src/models/ticket.dart';
 import 'package:equatable/equatable.dart';
+
 
 class BlocEvent extends Equatable {
 
@@ -77,6 +79,28 @@ class SpeakersTappedEvent extends BlocEvent {
 
   @override
   String toString() => 'SpeakerTappedEvent {speaker: $speaker}';
+
+}
+
+class BadgeTappedEvent extends BlocEvent {
+
+  final Badge badge;
+
+  BadgeTappedEvent(this.badge);
+
+  @override
+  String toString() => 'BadgeTappedEvent {badge: $badge}';
+
+}
+
+class SocialTappedEvent extends BlocEvent {
+
+  final Social social;
+
+  SocialTappedEvent(this.social);
+
+  @override
+  String toString() => 'SocialTappedEvent {social: $social}';
 
 }
 

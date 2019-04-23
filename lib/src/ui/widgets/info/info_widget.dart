@@ -19,7 +19,7 @@ class InfoTabWidget extends StatelessWidget {
             tabs: [
               Tab(child: TabTextTheme("Team")),
               Tab(child: TabTextTheme("Partners")),
-              Tab(child: TabTextTheme("About")),
+              Tab(child: TabTextTheme("Venue")),
             ],
           ),
           Expanded(child: TabBarView(children: <Widget>[TeamPage(), PartnerPage(), MapsDemo()])),
