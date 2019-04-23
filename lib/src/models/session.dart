@@ -54,8 +54,8 @@ class Session extends Equatable {
           title: data[TITLE],
           description: data[DESCRIPTION],
           language: data[LANGUAGE],
-          icon: data[ICON],
-          image: data[IMAGE],
+          icon: data[ICON]??"",
+          image: data[IMAGE]??"",
           speakers: List<String>.from(data[SPEAKERS] ?? []),
           tags: List<String>.from(data[TAGS] ?? []),
         );
