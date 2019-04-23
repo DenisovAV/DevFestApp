@@ -11,46 +11,68 @@ class TicketsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpandedWidget(
-      image: AssetImage("assets/images/home.jpg"),
-      child: TransparentWidget(
-          child: Padding(
-              padding: EdgeInsets.only(top: 30.0),
-              child: Column(children: <Widget>[
-                Center(child: _HeaderPlateWidget()),
-                Container(height: 30.0),
-                _TicketsPanel()
-              ]))),
-    );
+        image: AssetImage("assets/images/home.jpg"),
+        child: TransparentWidget(
+          child: CustomScrollView(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: false,
+            slivers: <Widget>[
+              SliverPadding(
+                padding: EdgeInsets.symmetric(vertical: 2.0),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      if (index == 0)
+                        return Center(child: _HeaderPlateWidget());
+                      if (index > 1) return _TicketsPanel();
+                      return Container(height: 30.0);
+                    },
+                    childCount: 3,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 }
 
 class _TicketsPanel extends StatelessWidget {
+  _TicketsPanel();
+
   @override
   Widget build(BuildContext context) {
-    List<Ticket> tickets = BlocProvider.of(context).data.tickets;
-    return Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(16.0),
-          border: Border.all(width: 1.0, color: Colors.white),
-        ),
-        height: 250.0,
-        width: 290.0,
-        child: CustomScrollView(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: false,
-          slivers: <Widget>[
-            SliverPadding(
-              padding: EdgeInsets.symmetric(vertical: 2.0),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) => _TicketCard(tickets[index]),
-                  childCount: tickets.length,
-                ),
-              ),
-            ),
-          ],
-        ));
+    List<Widget> tickets = _separate(BlocProvider.of(context).data.tickets)
+        .map((list) => Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: list
+                .map((ticket) => Expanded(child: _TicketCard(ticket)))
+                .toList()))
+        .toList();
+    return TransparentWidget(
+        height: 150.0 * ((tickets.length + 1) / 2).truncate() + 60.0,
+        child: Column(children: [
+          Container(height: 10.0),
+          Text(
+            'Tickets',
+            style: Utils.headerTextStyle(Colors.white),
+          ),
+        Container(height: 10.0),
+          ...tickets
+        ]));
+  }
+
+  List<List<Ticket>> _separate(List<Ticket> tickets) {
+    List<List<Ticket>> ret = List<List<Ticket>>();
+    for (int i = 0; i < tickets.length; i += 2) {
+      List<Ticket> tmp = List<Ticket>();
+      tmp.add(tickets[i]);
+      if (i + 1 != tickets.length) {
+        tmp.add(tickets[i + 1]);
+      }
+      ret.add(tmp);
+    }
+    return ret;
   }
 }
 
@@ -74,16 +96,21 @@ class _HeaderPlateWidget extends StatelessWidget {
       Container(
         height: 10.0,
       ),
+      Padding(padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: Text(
+          'What is DevFest? Google Developer Group DevFests are the largest'
+              ' Google related events in the world! Each DevFest is carefully'
+              ' crafted for you by your local GDG community to bring in awesome'
+              ' speakers from all over the world, great topics, and lots fun!',
+          textAlign: TextAlign.center,
+          style: Utils.subHeaderTextStyle())),
+      Container(
+        height: 10.0,
+      ),
       OutlineButton(
         borderSide: BorderSide(color: Colors.white),
         child: Text('VIEW HIGHLIGHTS', style: TextStyle(color: Colors.white)),
         onPressed: () =>
-            /* FlutterYoutube.playYoutubeVideoById(
-                apiKey: YOUTUBE_API,
-                videoId: YOUTUBE_KEY,
-                autoPlay: true, //default falase
-                fullScreen: false //default false
-            )*/
             BlocProvider.of(context).data.events.add(HighlightsTappedEvent()),
       )
     ]);
@@ -101,11 +128,11 @@ class _TicketCard extends StatelessWidget {
         padding: EdgeInsets.only(bottom: 6.0),
         child: Column(children: <Widget>[
           Container(
-              width: 180.0,
+              width: 200.0,
               child: Column(children: <Widget>[
                 Text(
                     this.ticket.name +
-                        '   ' +
+                        '  ' +
                         this.ticket.currency +
                         this.ticket.price.toString(),
                     style: Utils.subHeaderTextStyle2()),
