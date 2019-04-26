@@ -44,9 +44,11 @@ flutter:
    - assets/images/team.jpg
    - assets/images/logo.svg
    - assets/images/logo.png
+   - assets/images/logo_grey.png
    - assets/images/logo_blue.png
    - assets/images/logo-monochrome.svg
    - assets/images/organizer-logo.svg
+   - assets/images/organizer-logo.png
    - assets/images/organizer-logo-white.png
    - assets/images/google.svg
    - assets/icons/link-icon.svg

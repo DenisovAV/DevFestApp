@@ -24,13 +24,14 @@ class App extends StatelessWidget {
           fontFamily: "GoogleSans"),
       home: AppPage(
           userRepository:
-          FirebaseUserRepository(FirebaseAuth.instance, GoogleSignIn())),
+              FirebaseUserRepository(FirebaseAuth.instance, GoogleSignIn())),
       //navigatorObservers: <NavigatorObserver>[observer],
     );
   }
 }
 
-class AppPage extends StatelessWidget{
+
+class AppPage extends StatelessWidget {
   final UserRepository userRepository;
 
   AppPage({Key key, @required this.userRepository}) : super(key: key);
@@ -39,23 +40,22 @@ class AppPage extends StatelessWidget{
   Widget build(BuildContext context) {
     final AuthBloc _authenticationBloc = AuthBloc(userRepository);
     return BlocProvider(
-        child: MaterialApp(
-            home: StreamBuilder(
-                stream: _authenticationBloc.authStream,
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return SplashPage();
-                  } else {
-                    BlocEvent event = snapshot.data;
-                    if (event is LoggingInEvent) {
-                      return MainPage(user: _authenticationBloc.user);
-                    }
-                    if (event is LoggingOutEvent) {
-                      return SignInPage();
-                    }
-                    return SplashPage();
-                  }
-                })),
+        child: StreamBuilder(
+            stream: _authenticationBloc.authStream,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return SplashPage();
+              } else {
+                BlocEvent event = snapshot.data;
+                if (event is LoggingInEvent) {
+                  return MainPage(user: _authenticationBloc.user);
+                }
+                if (event is LoggingOutEvent) {
+                  return SignInPage();
+                }
+                return SplashPage();
+              }
+            }),
         data: DataBloc(FirestoreRepository(Firestore.instance)),
         auth: _authenticationBloc);
   }
