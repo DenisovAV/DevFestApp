@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:devfest_flutter_app/src/bloc/auth/auth_bloc.dart';
 import 'package:devfest_flutter_app/src/bloc/data/data_bloc.dart';
 import 'package:devfest_flutter_app/src/bloc/events/event.dart';
@@ -5,7 +6,6 @@ import 'package:devfest_flutter_app/src/consts/strings.dart';
 import 'package:devfest_flutter_app/src/providers/bloc_provider.dart';
 import 'package:devfest_flutter_app/src/ui/screens/home/home_page.dart';
 import 'package:devfest_flutter_app/src/ui/screens/schedule/schedule_page.dart';
-import 'package:devfest_flutter_app/src/models/user.dart';
 import 'package:devfest_flutter_app/src/ui/screens/speakers/speakers_page.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/info/info_widget.dart';
 import 'package:devfest_flutter_app/src/utils/widgets.dart';
@@ -25,14 +25,9 @@ class NavigationItem {
         );
   final Widget bodyItem;
   final BottomNavigationBarItem barItem;
-
 }
 
 class MainPage extends StatefulWidget {
-  MainPage({this.user});
-
-  final User user;
-
   @override
   _MainPageState createState() => _MainPageState();
 }
@@ -86,22 +81,31 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                     child: SvgPicture.asset('assets/images/logo-monochrome.svg',
                         color: Colors.white)),
                 actions: <Widget>[
+                  if (auth.user.name != null)
+                    Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: CircleImage(
+                            CachedNetworkImageProvider(auth.user.photoUrl),
+                            size: 46.0)),
                   PopupMenuButton<String>(
-                    onSelected: (String value)  => auth.events.add(LogoutEvent()),
+                    onSelected: (String value) =>
+                        auth.events.add(LogoutEvent()),
                     itemBuilder: (BuildContext context) =>
-                    <PopupMenuItem<String>>[
-                      PopupMenuItem<String>(
-                        value: SIGN_OUT,
-                        child: Text(SIGN_OUT),
-                      )
-                    ],
+                        <PopupMenuItem<String>>[
+                          PopupMenuItem<String>(
+                            value: SIGN_OUT,
+                            child: Text(SIGN_OUT),
+                          )
+                        ],
                   )
                 ],
               ),
-              body: _navigationViews[(snapshot.data as NavigatorEvent).index].bodyItem,
+              body: _navigationViews[(snapshot.data as NavigatorEvent).index]
+                  .bodyItem,
               bottomNavigationBar: BottomNavigationBar(
                 items: _navigationViews
-                    .map((navigationView) => navigationView.barItem).toList(),
+                    .map((navigationView) => navigationView.barItem)
+                    .toList(),
                 currentIndex: (snapshot.data as NavigatorEvent).index,
                 type: BottomNavigationBarType.shifting,
                 onTap: (int index) {
@@ -110,7 +114,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               ),
             );
           }
-        }
-    );
+        });
   }
 }

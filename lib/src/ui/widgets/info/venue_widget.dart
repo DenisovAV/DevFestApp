@@ -46,7 +46,7 @@ class MapsDemoState extends State<MapsDemo> {
           initialCameraPosition: _kVenue,
           gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
             Factory<OneSequenceGestureRecognizer>(
-                  () => EagerGestureRecognizer(),
+              () => EagerGestureRecognizer(),
             ),
           ].toSet(),
           onMapCreated: (GoogleMapController controller) {
@@ -58,12 +58,12 @@ class MapsDemoState extends State<MapsDemo> {
             child: Row(children: <Widget>[
               Expanded(
                   child: TransparentWidget(
-                    height: 150.0,
-                    child: _VenueInfoCard(
-                        "IT-Park Ankudinovka is a new modernized venue, combining"
-                            " a business center, a technopark in the sphere of high"
-                            " technologies, conference facilities and exhibition opportunities"),
-                  ))
+                height: 150.0,
+                child: _VenueInfoCard(
+                    "IT-Park Ankudinovka is a new modernized venue, combining"
+                    " a business center, a technopark in the sphere of high"
+                    " technologies, conference facilities and exhibition opportunities"),
+              ))
             ]))
       ]),
     );
@@ -89,9 +89,9 @@ class _VenueInfoCard extends StatelessWidget {
               width: 320.0,
               child: Text(
                 "IT-Park Ankudinovka is a new modernized venue, combining"
-                    " a business center, a technopark in the sphere of high"
-                    " technologies, conference facilities and exhibition opportunities",
-                style: Utils.subHeaderTextStyle2(),
+                " a business center, a technopark in the sphere of high"
+                " technologies, conference facilities and exhibition opportunities",
+                style: Utils.getPreparedTextStyle(fontSize: Utils.info_size),
                 textAlign: TextAlign.center,
               ))
         ]));

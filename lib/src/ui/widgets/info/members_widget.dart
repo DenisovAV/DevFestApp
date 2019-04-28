@@ -128,9 +128,11 @@ class _MemberCardContent extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(height: 4.0),
-              Text(member.name, style: Utils.subHeaderTextStyle()),
+              Text(member.name,
+                  style: Utils.getPreparedTextStyle(
+                      fontSize: Utils.sub_header_size)),
               Container(height: 8.0),
-              Text(member.title, style: Utils.regularTextStyle()),
+              Text(member.title, style: Utils.getPreparedTextStyle()),
               Container(height: 8.0),
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -159,7 +161,7 @@ class _TeamTitleText extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 4.0),
       alignment: Alignment.center,
-      child: Text(text, style: Utils.headerTextStyle(Colors.white)),
+      child: Text(text, style: Utils.getPreparedTextStyle(fontSize: Utils.header_size)),
     );
   }
 }

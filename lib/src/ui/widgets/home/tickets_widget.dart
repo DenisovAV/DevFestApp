@@ -55,9 +55,9 @@ class _TicketsPanel extends StatelessWidget {
           Container(height: 10.0),
           Text(
             'Tickets',
-            style: Utils.headerTextStyle(Colors.white),
+            style: Utils.getPreparedTextStyle(fontSize: Utils.header_size),
           ),
-        Container(height: 10.0),
+          Container(height: 10.0),
           ...tickets
         ]));
   }
@@ -88,22 +88,25 @@ class _HeaderPlateWidget extends StatelessWidget {
             fit: BoxFit.contain,
           )),
       Text('Nizhny Novgorod. October 27, 2018',
-          style: Utils.subHeaderTextStyle2()),
+          style: Utils.getPreparedTextStyle(fontSize: Utils.info_size)),
       Container(
         height: 10.0,
       ),
-      Text('Be a hero. Be a GDG!', style: Utils.headerTextStyle(Colors.white)),
+      Text('Be a hero. Be a GDG!',
+          style: Utils.getPreparedTextStyle(fontSize: Utils.header_size)),
       Container(
         height: 10.0,
       ),
-      Padding(padding: EdgeInsets.symmetric(horizontal: 20.0),
+      Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
           child: Text(
-          'What is DevFest? Google Developer Group DevFests are the largest'
+              'What is DevFest? Google Developer Group DevFests are the largest'
               ' Google related events in the world! Each DevFest is carefully'
               ' crafted for you by your local GDG community to bring in awesome'
               ' speakers from all over the world, great topics, and lots fun!',
-          textAlign: TextAlign.center,
-          style: Utils.subHeaderTextStyle())),
+              textAlign: TextAlign.center,
+              style:
+                  Utils.getPreparedTextStyle(fontSize: Utils.sub_header_size))),
       Container(
         height: 10.0,
       ),
@@ -135,10 +138,12 @@ class _TicketCard extends StatelessWidget {
                         '  ' +
                         this.ticket.currency +
                         this.ticket.price.toString(),
-                    style: Utils.subHeaderTextStyle2()),
+                    style: Utils.getPreparedTextStyle(
+                        fontSize: Utils.ticket_size)),
                 Text(this.ticket.starts + ' - ' + this.ticket.ends,
-                    style: Utils.subHeaderTextStyle()),
-                Text(this.ticket.info ?? '', style: Utils.regularTextStyle())
+                    style: Utils.getPreparedTextStyle(
+                        fontSize: Utils.sub_header_size)),
+                Text(this.ticket.info ?? '', style: Utils.getPreparedTextStyle())
               ])),
           Container(
               width: 160.0,

@@ -10,5 +10,5 @@ class User extends Equatable {
         super([id, name, photoUrl]);
 
   @override
-  String toString() => 'User{id: $id, displayName: $name}';
+  String toString() => 'User{id: $id, name: $name}';
 }

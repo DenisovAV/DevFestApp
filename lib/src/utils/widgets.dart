@@ -10,16 +10,19 @@ class LoadingWidget extends StatelessWidget {
 }
 
 class CircleImage extends StatelessWidget {
-  final ImageProvider image;
-  CircleImage(this.image);
+  final ImageProvider _image;
+  final double _size;
+  CircleImage(ImageProvider image, {double size})
+      : _image = image,
+        _size = size ?? 92.0;
 
   Widget build(BuildContext context) {
     return Container(
-        width: 92.0,
-        height: 92.0,
+        width: _size,
+        height: _size,
         decoration: BoxDecoration(
             shape: BoxShape.circle,
-            image: DecorationImage(fit: BoxFit.fill, image: image)));
+            image: DecorationImage(fit: BoxFit.fill, image: _image)));
   }
 }
 
@@ -30,7 +33,7 @@ class CachedImage extends StatelessWidget {
   CachedImage(this.url, {this.fit});
 
   Widget build(BuildContext context) {
-    if(url == null) {
+    if (url == null) {
       return Image.asset('assets/images/logo_blue.png');
     }
     return url.contains('.svg')
@@ -38,10 +41,11 @@ class CachedImage extends StatelessWidget {
             fit: fit ?? BoxFit.contain,
             headers: {'Cache-Control': 'only-if-cached'})
         : CachedNetworkImage(
-            imageUrl: url,
-            fit: fit ?? BoxFit.contain,
-            placeholder: (context, url) => LoadingWidget(),
-            errorWidget: (context, url, error) => Icon(Icons.error),
-          ) ?? Container();
+              imageUrl: url,
+              fit: fit ?? BoxFit.contain,
+              placeholder: (context, url) => LoadingWidget(),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+            ) ??
+            Container();
   }
 }

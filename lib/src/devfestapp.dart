@@ -48,7 +48,7 @@ class AppPage extends StatelessWidget {
               } else {
                 BlocEvent event = snapshot.data;
                 if (event is LoggingInEvent) {
-                  return MainPage(user: _authenticationBloc.user);
+                  return MainPage();
                 }
                 if (event is LoggingOutEvent) {
                   return SignInPage();

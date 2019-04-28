@@ -96,7 +96,8 @@ class _LogoSign extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         alignment: FractionalOffset.topCenter,
-        child: SizedBox(width: 140.0, height: 60.0, child: CachedImage(logoUrl)));
+        child:
+            SizedBox(width: 140.0, height: 60.0, child: CachedImage(logoUrl)));
   }
 }
 
@@ -110,7 +111,11 @@ class _PartnerTitleText extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 4.0),
       alignment: Alignment.center,
-      child: Text(text, style: Utils.headerTextStyle(Colors.blue)),
+      child: Text(text,
+          style: Utils.getPreparedTextStyle(
+              fontSize: Utils.header_size,
+              fontWeight: Utils.header_weight,
+              color: Colors.blue)),
     );
   }
 }
