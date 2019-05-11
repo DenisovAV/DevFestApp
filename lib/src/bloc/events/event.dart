@@ -34,13 +34,6 @@ class TicketsLoadedEvent extends BlocEvent {
 
 }
 
-class HighlightsTappedEvent extends BlocEvent {
-
-  @override
-  String toString() => 'HighlightsTappedEvent';
-
-}
-
 class TicketTappedEvent extends BlocEvent {
 
   final Ticket ticket;

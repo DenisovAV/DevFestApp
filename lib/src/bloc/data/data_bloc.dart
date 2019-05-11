@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:devfest_flutter_app/src/bloc/events/event.dart';
-import 'package:devfest_flutter_app/src/consts/strings.dart';
 import 'package:devfest_flutter_app/src/models/partner.dart';
 import 'package:devfest_flutter_app/src/models/schedule.dart';
 import 'package:devfest_flutter_app/src/models/session.dart';
@@ -9,7 +8,6 @@ import 'package:devfest_flutter_app/src/models/speaker.dart';
 import 'package:devfest_flutter_app/src/models/team.dart';
 import 'package:devfest_flutter_app/src/models/ticket.dart';
 import 'package:devfest_flutter_app/src/resources/abstracts/abstract_repositories.dart';
-import 'package:flutter_youtube/flutter_youtube.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -127,9 +125,6 @@ class DataBloc {
 
   _onEvent(BlocEvent event) {
     switch (event.runtimeType){
-      case HighlightsTappedEvent:
-        _playVideo();
-        break;
       case TicketTappedEvent:
         _launchURL((event as TicketTappedEvent).ticket.url);
         break;
@@ -140,22 +135,6 @@ class DataBloc {
         _launchURL((event as BadgeTappedEvent).badge.link);
         break;
     }
-  }
-
-  void _playVideo(){
-    FlutterYoutube.playYoutubeVideoById(
-        apiKey: YOUTUBE_API,
-        videoId: YOUTUBE_KEY,
-        autoPlay: true, //default falase
-        fullScreen: false //default false
-    );
-    //TODO: Переделать на Youtube player виджет
-    /*YoutubePlayer(
-      source: YOUTUBE_KEY,
-      quality: YoutubeQuality.HD,
-      aspectRatio: 16/9,
-      showThumbnail: true,
-    );*/
   }
 
   Future _launchURL(String url) async {
