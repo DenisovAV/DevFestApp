@@ -1,9 +1,14 @@
 import 'package:devfest_flutter_app/src/bloc/events/event.dart';
+import 'package:devfest_flutter_app/src/consts/strings.dart';
 import 'package:devfest_flutter_app/src/models/ticket.dart';
 import 'package:devfest_flutter_app/src/providers/bloc_provider.dart';
 import 'package:devfest_flutter_app/src/ui/widgets/common/expanded_widget.dart';
 import 'package:devfest_flutter_app/src/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
+import "package:youtube_player_flutter/youtube_player_flutter.dart";
 
 //TODO: Сделать картинки и надписи из конфига (yml или по другому)
 
@@ -111,11 +116,11 @@ class _HeaderPlateWidget extends StatelessWidget {
         height: 10.0,
       ),
       OutlineButton(
-        borderSide: BorderSide(color: Colors.white),
-        child: Text('VIEW HIGHLIGHTS', style: TextStyle(color: Colors.white)),
-        onPressed: () =>
-            BlocProvider.of(context).data.events.add(HighlightsTappedEvent()),
-      )
+          borderSide: BorderSide(color: Colors.white),
+          child: Text('VIEW HIGHLIGHTS', style: TextStyle(color: Colors.white)),
+          onPressed: () => showDialog(
+              builder: (context) => YoutubeHighlightsPlayer(), context: context)
+          )
     ]);
   }
 }
@@ -143,7 +148,8 @@ class _TicketCard extends StatelessWidget {
                 Text(this.ticket.starts + ' - ' + this.ticket.ends,
                     style: Utils.getPreparedTextStyle(
                         fontSize: Utils.sub_header_size)),
-                Text(this.ticket.info ?? '', style: Utils.getPreparedTextStyle())
+                Text(this.ticket.info ?? '',
+                    style: Utils.getPreparedTextStyle())
               ])),
           Container(
               width: 160.0,
@@ -160,5 +166,84 @@ class _TicketCard extends StatelessWidget {
                     .add(TicketTappedEvent(ticket)),
               )))
         ]));
+  }
+}
+
+/// Всоспроизводит видео в AlertDialog из "YOUTUBE_KEY"
+class YoutubeHighlightsPlayer extends StatefulWidget {
+  @override
+  _YoutubeHighlightsPlayerState createState() =>
+      _YoutubeHighlightsPlayerState();
+}
+
+class _YoutubeHighlightsPlayerState extends State<YoutubeHighlightsPlayer>
+    with SingleTickerProviderStateMixin {
+  AnimationController _animationController;
+  Animation<double> _animation;
+  YoutubePlayerController _youtubePlayerController;
+  YoutubePlayer _youtubePlayer;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 750),
+    );
+    _animation =
+        CurveTween(curve: Curves.elasticInOut).animate(_animationController);
+    _youtubePlayer = YoutubePlayer(
+      videoId: YOUTUBE_KEY,
+      context: context,
+      onPlayerInitialized: (controller) {
+        _youtubePlayerController = controller;
+        controller.addListener(_listenPlayer);
+      },
+    );
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _animationController.forward();
+    return AnimatedBuilder(
+      animation: _animation,
+      child: SimpleDialog(
+        backgroundColor: Colors.transparent,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.all(7),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            child: _youtubePlayer,
+          )
+        ],
+        contentPadding: EdgeInsets.all(0),
+      ),
+      builder: (context, child) {
+        return Transform.scale(
+          scale: _animation.value,
+          child: child,
+        );
+      },
+    );
+  }
+
+  /// Close video at the end
+  void _listenPlayer() {
+    if (_youtubePlayerController.value.duration.inSeconds != 0 &&
+        _youtubePlayerController.value.position.inSeconds >=
+            _youtubePlayerController.value.duration.inSeconds - 1) {
+      _youtubePlayerController.pause();
+      _youtubePlayerController.dispose();
+      Navigator.of(context).pop();
+    }
+  }
+
+  @override
+  void dispose() {
+    _youtubePlayerController.dispose();
+    super.dispose();
   }
 }
