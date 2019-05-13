@@ -30,6 +30,9 @@ class BadgeIcon extends StatelessWidget {
                 CircleBorder(side: BorderSide(color: Colors.white, width: 3.0)),
             mini: true,
             onPressed: () {
+              // TODO fix NoSuchMethodError: The getter 'events' was called on null.
+              // в BlocProvider.of(context) возврощаемый Provider == null
+              // ощущение, что не тот context, если я правильно понимаю как это работает
               BlocProvider.of(context).data.events.add(BadgeTappedEvent(badge));
             }));
   }
@@ -55,8 +58,10 @@ class SocialIcon extends StatelessWidget {
           iconSize: _size,
           padding: _padding != null ? _padding : EdgeInsets.zero,
           icon:
-              SvgPicture.asset('assets/icons/${social.name}.svg', color: color),
+              SvgPicture.asset('assets/icons/${social.name.toLowerCase()}.svg', color: color),
           onPressed: () {
+            
+            // TODO NoSuchMethodError: The getter 'events' was called on null.
             BlocProvider.of(context).data.events.add(SocialTappedEvent(social));
           }),
       width: _size,

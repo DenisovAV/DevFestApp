@@ -139,6 +139,9 @@ class DataBloc {
       case BadgeTappedEvent:
         _launchURL((event as BadgeTappedEvent).badge.link);
         break;
+      case SocialTappedEvent:
+        _launchURL((event as SocialTappedEvent).social.link);
+        break;
     }
   }
 
