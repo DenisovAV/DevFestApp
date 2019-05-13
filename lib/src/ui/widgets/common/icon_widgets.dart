@@ -55,7 +55,7 @@ class SocialIcon extends StatelessWidget {
           iconSize: _size,
           padding: _padding != null ? _padding : EdgeInsets.zero,
           icon:
-              SvgPicture.asset('assets/icons/${social.name}.svg', color: color),
+              SvgPicture.asset('assets/icons/${social.name.toLowerCase()}.svg', color: color),
           onPressed: () {
             BlocProvider.of(context).data.events.add(SocialTappedEvent(social));
           }),
